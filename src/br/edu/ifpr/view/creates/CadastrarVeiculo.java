@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.edu.ifpr.util;
+package br.edu.ifpr.view.creates;
 
 import br.edu.ifpr.bean.Categoria;
 import br.edu.ifpr.bean.Marca;
@@ -15,6 +15,8 @@ import br.edu.ifpr.dao.MarcaDAO;
 import br.edu.ifpr.dao.MunicipioDAO;
 import br.edu.ifpr.dao.ProprietarioDAO;
 import br.edu.ifpr.dao.VeiculoDAO;
+import br.edu.ifpr.util.ConnectionFactory;
+import br.edu.ifpr.util.GenericComboBoxModel;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;

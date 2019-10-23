@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.edu.ifpr.util;
+package br.edu.ifpr.view.updates;
 
 import br.edu.ifpr.bean.Estado;
 import br.edu.ifpr.dao.EstadoDAO;
+import br.edu.ifpr.util.ConnectionFactory;
+import br.edu.ifpr.util.GenericComboBoxModel;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;

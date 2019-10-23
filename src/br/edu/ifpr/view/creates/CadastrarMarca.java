@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.edu.ifpr.util;
+package br.edu.ifpr.view.creates;
 
-import br.edu.ifpr.bean.Categoria;
-import br.edu.ifpr.dao.CategoriaDAO;
+import br.edu.ifpr.bean.Marca;
+import br.edu.ifpr.dao.MarcaDAO;
+import br.edu.ifpr.util.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -17,12 +18,12 @@ import javax.swing.JOptionPane;
  *
  * @author lucas
  */
-public class CadastrarCategoria extends javax.swing.JFrame {
+public class CadastrarMarca extends javax.swing.JFrame {
 
     /**
-     * Creates new form CadastrarCategoria
+     * Creates new form CadastrarMarca
      */
-    public CadastrarCategoria() {
+    public CadastrarMarca() {
         initComponents();
     }
 
@@ -35,20 +36,15 @@ public class CadastrarCategoria extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnCancelar = new javax.swing.JButton();
+        btnCadastrar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lblDescricao = new javax.swing.JLabel();
         txDescricao = new javax.swing.JTextField();
-        btnCancelar = new javax.swing.JButton();
-        btnCadastrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setLocation(new java.awt.Point(500, 300));
         setResizable(false);
-
-        jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel1.setText("Cadastrar Categoria");
-
-        lblDescricao.setText("Descrição: ");
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -64,6 +60,11 @@ public class CadastrarCategoria extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        jLabel1.setText("Cadastrar Marca");
+
+        lblDescricao.setText("Descrição: ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -71,19 +72,18 @@ public class CadastrarCategoria extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel1))
+                        .addGap(135, 135, 135)
+                        .addComponent(btnCancelar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCadastrar))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lblDescricao)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(135, 135, 135)
-                        .addComponent(btnCancelar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCadastrar)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(txDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -98,7 +98,7 @@ public class CadastrarCategoria extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnCadastrar))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -107,32 +107,33 @@ public class CadastrarCategoria extends javax.swing.JFrame {
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         if (txDescricao.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
-                    + "preenchimento. Cuidado!", "Erro falta de prrenchimento", 
+                    + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
                     JOptionPane.ERROR_MESSAGE);
-        }else{
-                  try {
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-            
-            Categoria categoria = new Categoria(0, txDescricao.getText());
-            CategoriaDAO dao = new CategoriaDAO(con);
-            dao.create(categoria);
-            
-            int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
-                    + " deseja fazer mais cadastros?");
-            // 0= Sim, 1= Não
-            System.out.println(input);
-            if (input == 1) {
-                this.dispose();
+        } else {
+            try {
+                Connection con = ConnectionFactory.createConnectionToMySQL();
+
+                Marca marca = new Marca(0, txDescricao.getText());
+                MarcaDAO dao = new MarcaDAO(con);
+                dao.create(marca);
+
+                int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
+                        + " deseja fazer mais cadastros?");
+                // 0= Sim, 1= Não
+                System.out.println(input);
+                if (input == 1) {
+                    this.dispose();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(CadastrarMarca.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(CadastrarCategoria.class.getName()).log(Level.SEVERE, null, ex);
         }
-        }
-  
+
+
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-     this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
@@ -152,20 +153,20 @@ public class CadastrarCategoria extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CadastrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadastrarMarca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CadastrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadastrarMarca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CadastrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadastrarMarca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CadastrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadastrarMarca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CadastrarCategoria().setVisible(true);
+                new CadastrarMarca().setVisible(true);
             }
         });
     }

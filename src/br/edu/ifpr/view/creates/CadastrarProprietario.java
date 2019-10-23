@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.edu.ifpr.util;
+package br.edu.ifpr.view.creates;
 
 import br.edu.ifpr.bean.Proprietario;
 import br.edu.ifpr.dao.ProprietarioDAO;
+import br.edu.ifpr.util.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;

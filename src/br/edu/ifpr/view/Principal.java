@@ -3,8 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.edu.ifpr.util;
+package br.edu.ifpr.view;
 
+import br.edu.ifpr.view.deletes.ListarApagarProprietarios;
+import br.edu.ifpr.view.deletes.ListarApagarVeiculos;
+import br.edu.ifpr.view.updates.EditarEstados;
+import br.edu.ifpr.view.updates.EditarVeiculos;
+import br.edu.ifpr.view.creates.CadastrarEstado;
+import br.edu.ifpr.view.creates.CadastrarProprietario;
+import br.edu.ifpr.view.creates.CadastrarMarca;
+import br.edu.ifpr.view.creates.CadastrarVeiculo;
+import br.edu.ifpr.view.creates.CadastrarCategoria;
+import br.edu.ifpr.view.creates.CadastrarMunicipio;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
