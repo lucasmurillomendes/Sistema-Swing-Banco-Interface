@@ -339,7 +339,7 @@ public class EditarVeiculos extends javax.swing.JFrame {
                     this.dispose();
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(EditarEstadosMunicipios.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EditarEstados.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

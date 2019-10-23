@@ -218,7 +218,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void menuEditarEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditarEstadosActionPerformed
              try {
-            EditarEstadosMunicipios estado = new EditarEstadosMunicipios();
+            EditarEstados estado = new EditarEstados();
             estado.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);

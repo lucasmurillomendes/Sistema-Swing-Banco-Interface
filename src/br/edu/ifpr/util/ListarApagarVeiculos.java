@@ -157,7 +157,6 @@ public class ListarApagarVeiculos extends javax.swing.JFrame {
             try {
                 // Recupera o modelo da tbCliente
                 VeiculoTableModel tbmVeiculo = (VeiculoTableModel) jtVeiculos.getModel();
-
                 Connection con = ConnectionFactory.createConnectionToMySQL();
                 VeiculoDAO dao = new VeiculoDAO(con);
 
