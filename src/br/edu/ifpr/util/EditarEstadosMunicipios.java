@@ -6,7 +6,9 @@
 package br.edu.ifpr.util;
 
 import br.edu.ifpr.bean.Estado;
+import br.edu.ifpr.bean.Municipio;
 import br.edu.ifpr.dao.EstadoDAO;
+import br.edu.ifpr.dao.MunicipioDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -17,22 +19,22 @@ import javax.swing.JOptionPane;
  *
  * @author lucas
  */
-public class EditarEstados extends javax.swing.JFrame {
+public class EditarEstadosMunicipios extends javax.swing.JFrame {
 
     private GenericComboBoxModel<Estado> modelEstado;
-
+    private GenericComboBoxModel<Municipio> modelMunicipio;
     /**
      * Creates new form EditarEstados
      *
      * @throws java.lang.Exception
      */
-    public EditarEstados() throws Exception {
+    public EditarEstadosMunicipios() throws Exception {
         initComponents();
         iniciarComboBox();
     }
 
     public void iniciarComboBox() throws Exception {
-
+        //ESTADO
         modelEstado = new GenericComboBoxModel();
 
         Connection con = ConnectionFactory.createConnectionToMySQL();
@@ -47,6 +49,20 @@ public class EditarEstados extends javax.swing.JFrame {
 
         }
         cbEstado.setModel(modelEstado);
+        
+        //MUNICIPIO
+        modelMunicipio = new GenericComboBoxModel();
+        MunicipioDAO munDAO = new MunicipioDAO(con);
+
+        for (int i = 1; i < munDAO.retornaQTD(); i++) {
+            if (munDAO.retrieve(i) != null) {
+                Municipio municipio = munDAO.retrieve(i);
+                modelMunicipio.addElement(municipio);
+            }
+
+        }
+        cbMunicipio.setModel(modelMunicipio);
+      
     }
 
     /**
@@ -62,18 +78,22 @@ public class EditarEstados extends javax.swing.JFrame {
         cbEstado = new javax.swing.JComboBox<>();
         lblEstado = new javax.swing.JLabel();
         lblNome = new javax.swing.JLabel();
-        txNome = new javax.swing.JTextField();
+        txNomeEstado = new javax.swing.JTextField();
         lblSigla = new javax.swing.JLabel();
         txSigla = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
         btnAtualizarRegistro = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        cbMunicipio = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        txNomeMunicipio = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setLocation(new java.awt.Point(500, 200));
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel1.setText("Editar Estados Cadastrados");
+        jLabel1.setText("Editar Estados e Municipios Cadastrados");
 
         cbEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -83,11 +103,16 @@ public class EditarEstados extends javax.swing.JFrame {
 
         lblEstado.setText("Estado");
 
-        lblNome.setText("Nome:");
+        lblNome.setText("Nome Estado:");
 
         lblSigla.setText("Sigla:");
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnAtualizarRegistro.setText("Atualizar Estado");
         btnAtualizarRegistro.addActionListener(new java.awt.event.ActionListener() {
@@ -98,21 +123,27 @@ public class EditarEstados extends javax.swing.JFrame {
 
         jLabel2.setText("*Siga os mesmos padrões dos campos!");
 
+        jLabel3.setText("Município: ");
+
+        cbMunicipio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbMunicipioActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Nome Município:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnCancelar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAtualizarRegistro))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(53, 53, 53)
-                            .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(241, 241, 241))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(lblEstado)
@@ -124,64 +155,92 @@ public class EditarEstados extends javax.swing.JFrame {
                                     .addComponent(lblSigla))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txNome)
+                                    .addComponent(txNomeEstado)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(txSigla, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnCancelar)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnAtualizarRegistro)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cbMunicipio, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txNomeMunicipio)))
+                        .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(84, 84, 84)
+                .addComponent(jLabel1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblEstado))
+                    .addComponent(lblEstado)
+                    .addComponent(jLabel3)
+                    .addComponent(cbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNome)
-                    .addComponent(txNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txNomeEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(txNomeMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSigla)
                     .addComponent(txSigla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnAtualizarRegistro))
-                .addContainerGap())
+                .addGap(18, 18, 18))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAtualizarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarRegistroActionPerformed
-        if (txNome.getText().equals("") || txSigla.getText().equals("")) {
+        if (txNomeEstado.getText().equals("") || txSigla.getText().equals("")
+                || txNomeMunicipio.getText().equals("")) {
             //Exibe Mensagem de Erro
             JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
                     + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
                     JOptionPane.ERROR_MESSAGE);
         } else {
             try {
-                if (cbEstado.getSelectedItem() != null) {
+                if (cbEstado.getSelectedItem() != null
+                        || cbMunicipio.getSelectedItem() != null) {
                     //Recupera Estado
                     GenericComboBoxModel<Estado> comboEstado = (GenericComboBoxModel<Estado>) cbEstado.getModel();
+                    //Recupera Municipio
+                    GenericComboBoxModel<Municipio> comboMun = (GenericComboBoxModel<Municipio>) cbMunicipio.getModel();
                     //Conexao
                     Connection con = ConnectionFactory.createConnectionToMySQL();
 
                     EstadoDAO dao = new EstadoDAO(con);
 
                     Estado atualiza = new Estado(comboEstado.getSelectedItem().getId(),
-                            txNome.getText(), txSigla.getText());
-                    //dao.update(atualiza);
+                            txNomeEstado.getText(), txSigla.getText());
+                    dao.update(atualiza);
+                    
+                    MunicipioDAO daoMun = new MunicipioDAO(con);
+                    Municipio atualizaM = new Municipio(comboMun.getSelectedItem().getId(),
+                            txNomeMunicipio.getText(), comboEstado.getSelectedItem());
+                    daoMun.update(atualizaM);
                 } else {
                     //Exibe Mensagem de Erro
                     JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
@@ -190,7 +249,7 @@ public class EditarEstados extends javax.swing.JFrame {
                 }
                 
             } catch (SQLException ex) {
-                Logger.getLogger(EditarEstados.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EditarEstadosMunicipios.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -199,9 +258,18 @@ public class EditarEstados extends javax.swing.JFrame {
     private void cbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEstadoActionPerformed
         //Recupera Estado
         GenericComboBoxModel<Estado> comboEstado = (GenericComboBoxModel<Estado>) cbEstado.getModel();
-        txNome.setText(comboEstado.getSelectedItem().getNome());
+        txNomeEstado.setText(comboEstado.getSelectedItem().getNome());
         txSigla.setText(comboEstado.getSelectedItem().getSigla());
     }//GEN-LAST:event_cbEstadoActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+       this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void cbMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMunicipioActionPerformed
+        GenericComboBoxModel<Municipio> comboMun = (GenericComboBoxModel<Municipio>) cbMunicipio.getModel();
+        txNomeMunicipio.setText(comboMun.getSelectedItem().getNome());
+    }//GEN-LAST:event_cbMunicipioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -220,22 +288,23 @@ public class EditarEstados extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditarEstados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarEstadosMunicipios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditarEstados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarEstadosMunicipios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditarEstados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarEstadosMunicipios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditarEstados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarEstadosMunicipios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             try {
-                new EditarEstados().setVisible(true);
+                new EditarEstadosMunicipios().setVisible(true);
             } catch (Exception ex) {
-                Logger.getLogger(EditarEstados.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EditarEstadosMunicipios.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
@@ -244,12 +313,16 @@ public class EditarEstados extends javax.swing.JFrame {
     private javax.swing.JButton btnAtualizarRegistro;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JComboBox<Estado> cbEstado;
+    private javax.swing.JComboBox<Municipio> cbMunicipio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblSigla;
-    private javax.swing.JTextField txNome;
+    private javax.swing.JTextField txNomeEstado;
+    private javax.swing.JTextField txNomeMunicipio;
     private javax.swing.JTextField txSigla;
     // End of variables declaration//GEN-END:variables
 }

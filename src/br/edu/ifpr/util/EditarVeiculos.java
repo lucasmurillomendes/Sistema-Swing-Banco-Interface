@@ -171,6 +171,11 @@ public class EditarVeiculos extends javax.swing.JFrame {
         jLabel7.setText("*Siga os mesmos padrões dos campos!");
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnAtualizarRegistro.setText("Atualizar Veiculo");
         btnAtualizarRegistro.addActionListener(new java.awt.event.ActionListener() {
@@ -334,11 +339,15 @@ public class EditarVeiculos extends javax.swing.JFrame {
                     this.dispose();
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(EditarEstados.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EditarEstadosMunicipios.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
     }//GEN-LAST:event_btnAtualizarRegistroActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
