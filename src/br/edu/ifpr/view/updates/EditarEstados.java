@@ -31,6 +31,7 @@ public class EditarEstados extends javax.swing.JFrame {
     public EditarEstados() throws Exception {
         initComponents();
         iniciarComboBox();
+        
     }
 
     public void iniciarComboBox() throws Exception {

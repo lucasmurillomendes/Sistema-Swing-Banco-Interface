@@ -5,8 +5,17 @@
  */
 package br.edu.ifpr.view.updates;
 
-import br.edu.ifpr.view.deletes.*;
-import br.edu.ifpr.bean.Categoria;
+import br.edu.ifpr.bean.Estado;
+import br.edu.ifpr.bean.Municipio;
+import br.edu.ifpr.dao.EstadoDAO;
+import br.edu.ifpr.dao.MunicipioDAO;
+import br.edu.ifpr.util.ConnectionFactory;
+import br.edu.ifpr.util.GenericComboBoxModel;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,11 +23,51 @@ import br.edu.ifpr.bean.Categoria;
  */
 public class EditarMunicipio extends javax.swing.JFrame {
 
+    private GenericComboBoxModel<Municipio> municipiomodel;
+    private GenericComboBoxModel<Estado> modelEstado;
+
     /**
      * Creates new form ApagarMunicipio
      */
     public EditarMunicipio() {
-        initComponents();
+        try {
+            initComponents();
+            iniciarComboBox();
+            txId.setEditable(false);
+            txEstado.setEditable(false);
+        } catch (Exception ex) {
+            Logger.getLogger(EditarMunicipio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void iniciarComboBox() throws Exception {
+        Connection con = ConnectionFactory.createConnectionToMySQL();
+        // MUNICIPIO
+        municipiomodel = new GenericComboBoxModel();
+        MunicipioDAO mDAO = new MunicipioDAO(con);
+
+        for (int i = 1; i <= mDAO.retornaQTD(); i++) {
+            if (mDAO.retrieve(i) != null) {
+                Municipio municipio = mDAO.retrieve(i);
+                municipiomodel.addElement(municipio);
+            }
+        }
+        cbMunicipio.setModel(municipiomodel);
+
+        //ESTADO
+        modelEstado = new GenericComboBoxModel();
+
+        EstadoDAO estDAO = new EstadoDAO(con);
+
+        for (int i = 1; i < estDAO.retornaQTD(); i++) {
+            if (estDAO.retrieve(i) != null) {
+                Estado estado = estDAO.retrieve(i);
+                modelEstado.addElement(estado);
+            }
+
+        }
+        cbEstado.setModel(modelEstado);
+
     }
 
     /**
@@ -30,26 +79,41 @@ public class EditarMunicipio extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Apagar = new javax.swing.JButton();
+        btnAtualizar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lblCategoria = new javax.swing.JLabel();
-        cbCategoria = new javax.swing.JComboBox<>();
+        cbMunicipio = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txId = new javax.swing.JTextField();
         txNome = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        btnCancelar = new javax.swing.JButton();
+        cbEstado = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
         txEstado = new javax.swing.JTextField();
-        Cancelar = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        Apagar.setText("Apagar");
+        btnAtualizar.setText("Atualizar Municipio");
+        btnAtualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtualizarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel1.setText("Apagar Município");
+        jLabel1.setText("Editar Município");
 
-        lblCategoria.setText("Categoria: ");
+        lblCategoria.setText("Municipio:");
+
+        cbMunicipio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbMunicipioActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("ID:");
 
@@ -57,79 +121,155 @@ public class EditarMunicipio extends javax.swing.JFrame {
 
         jLabel4.setText("Estado:");
 
-        Cancelar.setText("Cancelar");
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Estado:");
+
+        jLabel6.setText("Dados Atuais:");
+
+        jLabel7.setText("Novos dados:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txId, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(126, 126, 126)
-                        .addComponent(Cancelar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Apagar))
+                        .addComponent(txEstado)
+                        .addGap(52, 52, 52))))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblCategoria)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(10, 10, 10))
-                            .addComponent(cbCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(lblCategoria)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(10, 10, 10))
+                                    .addComponent(cbMunicipio, 0, 182, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txNome)
+                                    .addComponent(cbEstado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7))
+                        .addGap(52, 52, 52))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(59, 59, 59)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txId, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txNome, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txEstado)))
-                .addGap(52, 52, 52))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnCancelar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnAtualizar)
+                        .addGap(46, 46, 46))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCategoria)
-                    .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(txId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(txEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(52, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(Apagar)
-                            .addComponent(Cancelar))
-                        .addContainerGap())))
+                    .addComponent(cbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCancelar)
+                    .addComponent(btnAtualizar))
+                .addGap(66, 66, 66))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cbMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMunicipioActionPerformed
+        GenericComboBoxModel<Municipio> comboMunicipio = (GenericComboBoxModel<Municipio>) cbMunicipio.getModel();
+        txId.setText(String.valueOf(comboMunicipio.getSelectedItem().getId()));
+        txEstado.setText(comboMunicipio.getSelectedItem().getEstado().getNome());
+        txNome.setText(comboMunicipio.getSelectedItem().getNome());
+    }//GEN-LAST:event_cbMunicipioActionPerformed
+
+    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
+        //Recupera Estado e Municipio
+        GenericComboBoxModel<Estado> comboEstado = (GenericComboBoxModel<Estado>) cbEstado.getModel();
+        GenericComboBoxModel<Municipio> comboMunicipio = (GenericComboBoxModel<Municipio>) cbMunicipio.getModel();
+
+        if (txNome.getText().equals("")) {
+            //Exibe Mensagem de Erro
+            JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
+                    + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                if (cbEstado.getSelectedItem() != null || cbMunicipio.getSelectedItem() != null) {
+                    //Conexao
+                    Connection con = ConnectionFactory.createConnectionToMySQL();
+
+                    MunicipioDAO dao = new MunicipioDAO(con);
+
+                    Municipio atualiza = new Municipio(comboMunicipio.getSelectedItem().getId(),
+                            txNome.getText(), comboEstado.getSelectedItem());
+                    dao.update(atualiza);
+                    int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
+                            + " deseja fazer mais edições?");
+                    // 0= Sim, 1= Não
+                    if (input == 1) {
+                        this.dispose();
+                    }
+                } else {
+                    //Exibe Mensagem de Erro
+                    JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
+                            + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(EditarEstados.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnAtualizarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,13 +310,17 @@ public class EditarMunicipio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Apagar;
-    private javax.swing.JButton Cancelar;
-    private javax.swing.JComboBox<Categoria> cbCategoria;
+    private javax.swing.JButton btnAtualizar;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JComboBox<Estado> cbEstado;
+    private javax.swing.JComboBox<Municipio> cbMunicipio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel lblCategoria;
     private javax.swing.JTextField txEstado;
     private javax.swing.JTextField txId;

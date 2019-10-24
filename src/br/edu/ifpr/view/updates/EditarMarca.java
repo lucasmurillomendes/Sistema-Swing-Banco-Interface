@@ -7,20 +7,46 @@ package br.edu.ifpr.view.updates;
 
 import br.edu.ifpr.view.deletes.*;
 import br.edu.ifpr.bean.Marca;
+import br.edu.ifpr.dao.MarcaDAO;
+import br.edu.ifpr.util.ConnectionFactory;
+import br.edu.ifpr.util.GenericComboBoxModel;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author lucas
  */
 public class EditarMarca extends javax.swing.JFrame {
-
+    private GenericComboBoxModel<Marca> marcaModel;
     /**
      * Creates new form ApagarMarca
      */
     public EditarMarca() {
         initComponents();
+        iniciarComboBox();
     }
-
+     public void iniciarComboBox(){
+        try {
+            Connection con = ConnectionFactory.createConnectionToMySQL();
+            //CATEGORIA
+            marcaModel = new GenericComboBoxModel();
+            MarcaDAO marcDAO = new MarcaDAO(con);
+            
+            for (int i = 1; i < marcDAO.retornaQTD(); i++) {
+                if (marcDAO.retrieve(i) != null) {
+                    Marca marca = marcDAO.retrieve(i);
+                    marcaModel.addElement(marca);
+                }
+            }
+            cbMarca.setModel(marcaModel);
+        } catch (SQLException ex) {
+            Logger.getLogger(EditarCategoria.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,11 +56,11 @@ public class EditarMarca extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Cancelar = new javax.swing.JButton();
-        Apagar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lblCategoria = new javax.swing.JLabel();
-        cbCategoria = new javax.swing.JComboBox<>();
+        cbMarca = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txId = new javax.swing.JTextField();
@@ -42,12 +68,22 @@ public class EditarMarca extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        Cancelar.setText("Cancelar");
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
-        Apagar.setText("Apagar");
+        btnEditar.setText("Atualizar Marca");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel1.setText("Apagar Marcas");
+        jLabel1.setText("Editar Marcas");
 
         lblCategoria.setText("Marca:");
 
@@ -64,9 +100,9 @@ public class EditarMarca extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                             .addGap(126, 126, 126)
-                            .addComponent(Cancelar)
+                            .addComponent(btnCancelar)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Apagar))
+                            .addComponent(btnEditar))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                             .addGap(57, 57, 57)
                             .addComponent(jLabel1)
@@ -84,8 +120,8 @@ public class EditarMarca extends javax.swing.JFrame {
                         .addGap(37, 37, 37)
                         .addComponent(lblCategoria)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(40, Short.MAX_VALUE))
+                        .addComponent(cbMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,7 +131,7 @@ public class EditarMarca extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCategoria)
-                    .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -106,13 +142,49 @@ public class EditarMarca extends javax.swing.JFrame {
                     .addComponent(txDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Cancelar)
-                    .addComponent(Apagar))
+                    .addComponent(btnCancelar)
+                    .addComponent(btnEditar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+       //Verificando Campos Nulos
+        if (txDescricao.getText().equals("") || cbMarca.getSelectedItem() == null) {
+            //Exibe Mensagem de Erro
+            JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
+                    + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                //Conexão
+                Connection con = ConnectionFactory.createConnectionToMySQL();
+                  //Recuperando Categoria
+                GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
+                //Criando Veículo
+                Marca marca = new Marca(cBoxMarca.getSelectedItem().getId(), 
+                        txDescricao.getText());
+
+                MarcaDAO dao = new MarcaDAO(con);
+                 dao.update(marca);
+                int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
+                        + " deseja fazer mais edições?");
+                // 0= Sim, 1= Não
+                System.out.println(input);
+                if (input == 1) {
+                    this.dispose();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(EditarEstados.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+       this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -153,9 +225,9 @@ public class EditarMarca extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Apagar;
-    private javax.swing.JButton Cancelar;
-    private javax.swing.JComboBox<Marca> cbCategoria;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JComboBox<Marca> cbMarca;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -11,6 +11,7 @@ import br.edu.ifpr.bean.Municipio;
 import br.edu.ifpr.bean.Proprietario;
 import br.edu.ifpr.bean.Veiculo;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -58,7 +59,7 @@ public class VeiculoDAO implements Dao<Integer, Veiculo> {
         try {
             PreparedStatement query = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             query.setString(1, entity.getPlaca());
-            query.setDate(2, entity.getAno());
+            query.setDate(2, new Date(entity.getAno().getTime()));
             query.setInt(3, entity.getCategoria().getId());
             query.setInt(4, entity.getPropietario().getId());
             query.setInt(5, entity.getMarca().getId());

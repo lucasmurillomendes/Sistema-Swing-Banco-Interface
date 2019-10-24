@@ -7,6 +7,7 @@ package br.edu.ifpr.dao;
 
 import br.edu.ifpr.bean.Proprietario;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,7 +41,7 @@ public class ProprietarioDAO implements Dao<Integer, Proprietario> {
             query.setString(4, entity.getCpf());
             query.setString(5, entity.getTelefone());
             query.setString(6, entity.getRg());
-            query.setDate(7, entity.getNascimento());
+            query.setDate(7, new Date(entity.getNascimento().getTime()));
 
             query.executeUpdate();
             ResultSet rs = query.getGeneratedKeys();

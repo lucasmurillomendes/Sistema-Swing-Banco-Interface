@@ -49,7 +49,7 @@ public class EditarVeiculos extends javax.swing.JFrame {
         veiculoModel = new GenericComboBoxModel();
         VeiculoDAO vDAO = new VeiculoDAO(con);
 
-        for (int i = 1; i < vDAO.retornaQTD() +1; i++) {
+        for (int i = 1; i <= vDAO.retornaQTD() +1; i++) {
             if (vDAO.retrieve(i) != null) {
                 Veiculo veiculo = vDAO.retrieve(i);
                 veiculoModel.addElement(veiculo);
@@ -62,7 +62,7 @@ public class EditarVeiculos extends javax.swing.JFrame {
         proprietarioModel = new GenericComboBoxModel();
         ProprietarioDAO pDAO = new ProprietarioDAO(con);
 
-        for (int i = 1; i < pDAO.retornaQTD(); i++) {
+        for (int i = 1; i <= pDAO.retornaQTD(); i++) {
 
             if (pDAO.retrieve(i) != null) {
                 Proprietario proprietario = pDAO.retrieve(i);
@@ -75,7 +75,7 @@ public class EditarVeiculos extends javax.swing.JFrame {
         municipiomodel = new GenericComboBoxModel();
         MunicipioDAO mDAO = new MunicipioDAO(con);
 
-        for (int i = 0; i < mDAO.retornaQTD(); i++) {
+        for (int i = 1; i <= mDAO.retornaQTD(); i++) {
             if (mDAO.retrieve(i) != null) {
                 Municipio municipio = mDAO.retrieve(i);
                 municipiomodel.addElement(municipio);
@@ -87,7 +87,7 @@ public class EditarVeiculos extends javax.swing.JFrame {
         marcaModel = new GenericComboBoxModel();
         MarcaDAO mcDAO = new MarcaDAO(con);
 
-        for (int i = 0; i < mcDAO.retornaQTD(); i++) {
+        for (int i = 1; i <= mcDAO.retornaQTD(); i++) {
             if (mDAO.retrieve(i) != null) {
                 Marca marca = mcDAO.retrieve(i);
                 marcaModel.addElement(marca);
@@ -99,7 +99,7 @@ public class EditarVeiculos extends javax.swing.JFrame {
         categoriaModel = new GenericComboBoxModel();
         CategoriaDAO cDAO = new CategoriaDAO(con);
 
-        for (int i = 0; i < cDAO.retornaQTD(); i++) {
+        for (int i = 1; i <= cDAO.retornaQTD(); i++) {
             if (cDAO.retrieve(i) != null) {
                 Categoria categoria = cDAO.retrieve(i);
                 categoriaModel.addElement(categoria);
