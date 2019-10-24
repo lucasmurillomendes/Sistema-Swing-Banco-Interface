@@ -94,7 +94,7 @@ public class ProprietarioDAO implements Dao<Integer, Proprietario> {
 
     @Override
     public void update(Proprietario entity) {
-          String sql = "UPDATE Estado SET nome = ?, endereco = ?, bairro =?, "
+          String sql = "UPDATE Proprietario SET nome = ?, endereco = ?, bairro =?, "
                   + "cpf = ?, telefone = ?, rg = ?, nascimento = ? WHERE id = ?";
         try {
             PreparedStatement query = con.prepareStatement(sql);

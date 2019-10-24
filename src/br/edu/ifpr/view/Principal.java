@@ -5,8 +5,8 @@
  */
 package br.edu.ifpr.view;
 
-import br.edu.ifpr.view.deletes.ListarApagarProprietarios;
-import br.edu.ifpr.view.deletes.ListarApagarVeiculos;
+import br.edu.ifpr.view.deletes.ApagarProprietarios;
+import br.edu.ifpr.view.deletes.ApagarVeiculos;
 import br.edu.ifpr.view.updates.EditarEstados;
 import br.edu.ifpr.view.updates.EditarVeiculos;
 import br.edu.ifpr.view.creates.CadastrarEstado;
@@ -320,12 +320,12 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-        ListarApagarVeiculos listar = new ListarApagarVeiculos();
+        ApagarVeiculos listar = new ApagarVeiculos();
         listar.setVisible(true);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void menuListarProprietarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuListarProprietarioActionPerformed
-       ListarApagarProprietarios listarP = new ListarApagarProprietarios();
+       ApagarProprietarios listarP = new ApagarProprietarios();
        listarP.setVisible(true);
     }//GEN-LAST:event_menuListarProprietarioActionPerformed
 
@@ -393,12 +393,12 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
-        ListarApagarProprietarios propl = new ListarApagarProprietarios();
+        ApagarProprietarios propl = new ApagarProprietarios();
         propl.setVisible(true);
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        ListarApagarVeiculos apveic = new ListarApagarVeiculos();
+        ApagarVeiculos apveic = new ApagarVeiculos();
         apveic.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
