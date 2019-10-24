@@ -302,8 +302,12 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuMarcaActionPerformed
 
     private void menuCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCategoriaActionPerformed
-        CadastrarCategoria categoria = new CadastrarCategoria();
-        categoria.setVisible(true);
+        try {
+            CadastrarCategoria categoria = new CadastrarCategoria();
+            categoria.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_menuCategoriaActionPerformed
 
     private void menuProprietarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProprietarioActionPerformed
@@ -354,13 +358,21 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        EditarMunicipio municipio = new EditarMunicipio();
-        municipio.setVisible(true);
+        try {
+            EditarMunicipio municipio = new EditarMunicipio();
+            municipio.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        EditarMarca marca = new EditarMarca();
-        marca.setVisible(true);
+        try {
+            EditarMarca marca = new EditarMarca();
+            marca.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed

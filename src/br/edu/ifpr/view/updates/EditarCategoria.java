@@ -10,6 +10,7 @@ import br.edu.ifpr.bean.Categoria;
 import br.edu.ifpr.dao.CategoriaDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.GenericComboBoxModel;
+import br.edu.ifpr.util.IniciaComboBox;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -22,32 +23,20 @@ import javax.swing.JOptionPane;
  */
 public class EditarCategoria extends javax.swing.JFrame {
     private GenericComboBoxModel<Categoria> categoriaModel;
+    Connection con;
     /** Creates new form ApagarCategoria */
     public EditarCategoria() {
-        initComponents();
-        iniciarComboBox();
-        txId.setEditable(false);
-        
-
-    }
-    public void iniciarComboBox(){
         try {
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-            //CATEGORIA
-            categoriaModel = new GenericComboBoxModel();
-            CategoriaDAO cDAO = new CategoriaDAO(con);
-            
-            for (int i = 1; i < cDAO.retornaQTD(); i++) {
-                if (cDAO.retrieve(i) != null) {
-                    Categoria categoria = cDAO.retrieve(i);
-                    categoriaModel.addElement(categoria);
-                }
-            }
-            cbCategoria.setModel(categoriaModel);
+            this.con = ConnectionFactory.createConnectionToMySQL();
+            initComponents();
+            new IniciaComboBox().iniciarComboBoxCategoria(cbCategoria);
+            txId.setEditable(false);
         } catch (SQLException ex) {
             Logger.getLogger(EditarCategoria.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+  
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -171,27 +160,20 @@ public class EditarCategoria extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
                     + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
                     JOptionPane.ERROR_MESSAGE);
-        } else {
-            try {
-                //Conexão
-                Connection con = ConnectionFactory.createConnectionToMySQL();
-                  //Recuperando Categoria
-                GenericComboBoxModel<Categoria> cBoxCategoria = (GenericComboBoxModel<Categoria>) cbCategoria.getModel();
-                //Criando Veículo
-                Categoria categoria = new Categoria(cBoxCategoria.getSelectedItem().getId(), 
-                        txDescricao.getText());
-
-                CategoriaDAO dao = new CategoriaDAO(con);
-                 dao.update(categoria);
-                int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
-                        + " deseja fazer mais edições?");
-                // 0= Sim, 1= Não
-                System.out.println(input);
-                if (input == 1) {
-                    this.dispose();
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(EditarEstados.class.getName()).log(Level.SEVERE, null, ex);
+        } else {         
+            //Recuperando Categoria
+            GenericComboBoxModel<Categoria> cBoxCategoria = (GenericComboBoxModel<Categoria>) cbCategoria.getModel();
+            //Criando Veículo
+            Categoria categoria = new Categoria(cBoxCategoria.getSelectedItem().getId(),
+                    txDescricao.getText());
+            CategoriaDAO dao = new CategoriaDAO(con);
+            dao.update(categoria);
+            int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
+                    + " deseja fazer mais edições?");
+            // 0= Sim, 1= Não
+            System.out.println(input);
+            if (input == 1) {
+                this.dispose();
             }
         }
     }//GEN-LAST:event_ApagarActionPerformed

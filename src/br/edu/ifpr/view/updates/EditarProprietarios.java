@@ -9,6 +9,7 @@ import br.edu.ifpr.bean.Proprietario;
 import br.edu.ifpr.dao.ProprietarioDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.GenericComboBoxModel;
+import br.edu.ifpr.util.IniciaComboBox;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -21,30 +22,14 @@ import javax.swing.JOptionPane;
  */
 public class EditarProprietarios extends javax.swing.JFrame {
 
-    private GenericComboBoxModel<Proprietario> proprietarioModel;
-
+    //Conexão
+    Connection con = ConnectionFactory.createConnectionToMySQL();
     /**
      * Creates new form ApagarCategoria
      */
     public EditarProprietarios() throws SQLException {
         initComponents();
-        iniciaComboBox();
-    }
-
-    public void iniciaComboBox() throws SQLException {
-        Connection con = ConnectionFactory.createConnectionToMySQL();
-        //PROPRIETARIO
-        proprietarioModel = new GenericComboBoxModel();
-        ProprietarioDAO pDAO = new ProprietarioDAO(con);
-
-        for (int i = 1; i <= pDAO.retornaQTD(); i++) {
-
-            if (pDAO.retrieve(i) != null) {
-                Proprietario proprietario = pDAO.retrieve(i);
-                proprietarioModel.addElement(proprietario);
-            }
-        }
-        cbProprietario.setModel(proprietarioModel);
+        new IniciaComboBox().iniciarComboBoxProprietario(cbProprietario);
     }
 
     /**
@@ -249,42 +234,35 @@ public class EditarProprietarios extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelaActionPerformed
 
     private void btnAtualizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizaActionPerformed
-      GenericComboBoxModel<Proprietario> cBoxProprietario = (GenericComboBoxModel<Proprietario>) cbProprietario.getModel();
+        GenericComboBoxModel<Proprietario> cBoxProprietario = (GenericComboBoxModel<Proprietario>) cbProprietario.getModel();
         if (txNome.getText().equals("")) {
             //Exibe Mensagem de Erro
             JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
                     + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
                     JOptionPane.ERROR_MESSAGE);
         } else {
-            try {
-                 //Colocando data (errado)
-                java.util.Date data = new java.util.Date();
-                java.sql.Date dataSql = new java.sql.Date(data.getTime());
-                if (cBoxProprietario.getSelectedItem() != null) {
-                    //Conexao
-                    Connection con = ConnectionFactory.createConnectionToMySQL();
+            //Colocando data (errado)
+            java.util.Date data = new java.util.Date();
+            java.sql.Date dataSql = new java.sql.Date(data.getTime());
 
-                    ProprietarioDAO dao = new ProprietarioDAO(con);
+            if (cBoxProprietario.getSelectedItem() != null) {
+                ProprietarioDAO dao = new ProprietarioDAO(con);
 
-                    Proprietario atualiza = new Proprietario(cBoxProprietario.getSelectedItem().getId(), 
-                            txNome.getText(), txEndereco.getText(), txBairro.getText(),
-                            txCpf.getText(), txTelefone.getText(), txRg.getText(), dataSql);
-                    dao.update(atualiza);
-                    int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
-                            + " deseja fazer mais edições?");
-                    // 0= Sim, 1= Não
-                    if (input == 1) {
-                        this.dispose();
-                    }
-                } else {
-                    //Exibe Mensagem de Erro
-                    JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
-                            + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
-                            JOptionPane.ERROR_MESSAGE);
+                Proprietario atualiza = new Proprietario(cBoxProprietario.getSelectedItem().getId(),
+                        txNome.getText(), txEndereco.getText(), txBairro.getText(),
+                        txCpf.getText(), txTelefone.getText(), txRg.getText(), dataSql);
+                dao.update(atualiza);
+                int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
+                        + " deseja fazer mais edições?");
+                // 0= Sim, 1= Não
+                if (input == 1) {
+                    this.dispose();
                 }
-
-            } catch (SQLException ex) {
-                Logger.getLogger(EditarEstados.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                //Exibe Mensagem de Erro
+                JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
+                        + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnAtualizaActionPerformed

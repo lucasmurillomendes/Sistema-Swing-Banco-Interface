@@ -11,6 +11,7 @@ import br.edu.ifpr.dao.EstadoDAO;
 import br.edu.ifpr.dao.MunicipioDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.GenericComboBoxModel;
+import br.edu.ifpr.util.IniciaComboBox;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -22,54 +23,22 @@ import javax.swing.JOptionPane;
  * @author lucas
  */
 public class EditarMunicipio extends javax.swing.JFrame {
-
+    Connection con = ConnectionFactory.createConnectionToMySQL();
     private GenericComboBoxModel<Municipio> municipiomodel;
     private GenericComboBoxModel<Estado> modelEstado;
 
     /**
      * Creates new form ApagarMunicipio
      */
-    public EditarMunicipio() {
-        try {
+    public EditarMunicipio() throws SQLException {    
             initComponents();
-            iniciarComboBox();
+            IniciaComboBox inicia = new IniciaComboBox();
+            inicia.iniciarComboBoxMunicipio(cbMunicipio);
+            inicia.iniciarComboBoxEstado(cbEstado);           
             txId.setEditable(false);
             txEstado.setEditable(false);
-        } catch (Exception ex) {
-            Logger.getLogger(EditarMunicipio.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
     }
-
-    public void iniciarComboBox() throws Exception {
-        Connection con = ConnectionFactory.createConnectionToMySQL();
-        // MUNICIPIO
-        municipiomodel = new GenericComboBoxModel();
-        MunicipioDAO mDAO = new MunicipioDAO(con);
-
-        for (int i = 1; i <= mDAO.retornaQTD(); i++) {
-            if (mDAO.retrieve(i) != null) {
-                Municipio municipio = mDAO.retrieve(i);
-                municipiomodel.addElement(municipio);
-            }
-        }
-        cbMunicipio.setModel(municipiomodel);
-
-        //ESTADO
-        modelEstado = new GenericComboBoxModel();
-
-        EstadoDAO estDAO = new EstadoDAO(con);
-
-        for (int i = 1; i < estDAO.retornaQTD(); i++) {
-            if (estDAO.retrieve(i) != null) {
-                Estado estado = estDAO.retrieve(i);
-                modelEstado.addElement(estado);
-            }
-
-        }
-        cbEstado.setModel(modelEstado);
-
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -239,31 +208,23 @@ public class EditarMunicipio extends javax.swing.JFrame {
                     + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
                     JOptionPane.ERROR_MESSAGE);
         } else {
-            try {
-                if (cbEstado.getSelectedItem() != null || cbMunicipio.getSelectedItem() != null) {
-                    //Conexao
-                    Connection con = ConnectionFactory.createConnectionToMySQL();
-
-                    MunicipioDAO dao = new MunicipioDAO(con);
-
-                    Municipio atualiza = new Municipio(comboMunicipio.getSelectedItem().getId(),
-                            txNome.getText(), comboEstado.getSelectedItem());
-                    dao.update(atualiza);
-                    int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
-                            + " deseja fazer mais edições?");
-                    // 0= Sim, 1= Não
-                    if (input == 1) {
-                        this.dispose();
-                    }
-                } else {
-                    //Exibe Mensagem de Erro
-                    JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
-                            + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
-                            JOptionPane.ERROR_MESSAGE);
+            if (cbEstado.getSelectedItem() != null || cbMunicipio.getSelectedItem() != null) {
+                MunicipioDAO dao = new MunicipioDAO(con);
+                
+                Municipio atualiza = new Municipio(comboMunicipio.getSelectedItem().getId(),
+                        txNome.getText(), comboEstado.getSelectedItem());
+                dao.update(atualiza);
+                int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
+                        + " deseja fazer mais edições?");
+                // 0= Sim, 1= Não
+                if (input == 1) {
+                    this.dispose();
                 }
-
-            } catch (SQLException ex) {
-                Logger.getLogger(EditarEstados.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                //Exibe Mensagem de Erro
+                JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
+                        + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnAtualizarActionPerformed
@@ -305,7 +266,11 @@ public class EditarMunicipio extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EditarMunicipio().setVisible(true);
+                try {
+                    new EditarMunicipio().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(EditarMunicipio.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

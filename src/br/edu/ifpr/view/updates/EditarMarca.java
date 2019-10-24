@@ -5,11 +5,11 @@
  */
 package br.edu.ifpr.view.updates;
 
-import br.edu.ifpr.view.deletes.*;
 import br.edu.ifpr.bean.Marca;
 import br.edu.ifpr.dao.MarcaDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.GenericComboBoxModel;
+import br.edu.ifpr.util.IniciaComboBox;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -21,32 +21,19 @@ import javax.swing.JOptionPane;
  * @author lucas
  */
 public class EditarMarca extends javax.swing.JFrame {
-    private GenericComboBoxModel<Marca> marcaModel;
+
+    //conexão
+    Connection con = ConnectionFactory.createConnectionToMySQL();
+
     /**
      * Creates new form ApagarMarca
      */
-    public EditarMarca() {
+    public EditarMarca() throws SQLException {
         initComponents();
-        iniciarComboBox();
+        new IniciaComboBox().iniciarComboBoxMarca(cbMarca);
+        txId.setEditable(false);
     }
-     public void iniciarComboBox(){
-        try {
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-            //CATEGORIA
-            marcaModel = new GenericComboBoxModel();
-            MarcaDAO marcDAO = new MarcaDAO(con);
-            
-            for (int i = 1; i < marcDAO.retornaQTD(); i++) {
-                if (marcDAO.retrieve(i) != null) {
-                    Marca marca = marcDAO.retrieve(i);
-                    marcaModel.addElement(marca);
-                }
-            }
-            cbMarca.setModel(marcaModel);
-        } catch (SQLException ex) {
-            Logger.getLogger(EditarCategoria.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -88,6 +75,12 @@ public class EditarMarca extends javax.swing.JFrame {
         jLabel1.setText("Editar Marcas");
 
         lblCategoria.setText("Marca:");
+
+        cbMarca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbMarcaActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("ID:");
 
@@ -153,40 +146,40 @@ public class EditarMarca extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-       //Verificando Campos Nulos
+        //Verificando Campos Nulos
         if (txDescricao.getText().equals("") || cbMarca.getSelectedItem() == null) {
             //Exibe Mensagem de Erro
             JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
                     + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
                     JOptionPane.ERROR_MESSAGE);
         } else {
-            try {
-                //Conexão
-                Connection con = ConnectionFactory.createConnectionToMySQL();
-                  //Recuperando Categoria
-                GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
-                //Criando Veículo
-                Marca marca = new Marca(cBoxMarca.getSelectedItem().getId(), 
-                        txDescricao.getText());
-
-                MarcaDAO dao = new MarcaDAO(con);
-                 dao.update(marca);
-                int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
-                        + " deseja fazer mais edições?");
-                // 0= Sim, 1= Não
-                System.out.println(input);
-                if (input == 1) {
-                    this.dispose();
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(EditarEstados.class.getName()).log(Level.SEVERE, null, ex);
+            //Recuperando Marca
+            GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
+            //Criando Veículo
+            Marca marca = new Marca(cBoxMarca.getSelectedItem().getId(),
+                    txDescricao.getText());
+            MarcaDAO dao = new MarcaDAO(con);
+            dao.update(marca);
+            int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
+                    + " deseja fazer mais edições?");
+            // 0= Sim, 1= Não
+            System.out.println(input);
+            if (input == 1) {
+                this.dispose();
             }
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-       this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void cbMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMarcaActionPerformed
+        //Recuperando Marca
+            GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
+            txId.setText(String.valueOf(cBoxMarca.getSelectedItem().getId()));
+            txDescricao.setText(cBoxMarca.getSelectedItem().getDescricao());
+    }//GEN-LAST:event_cbMarcaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -221,7 +214,11 @@ public class EditarMarca extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EditarMarca().setVisible(true);
+                try {
+                    new EditarMarca().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(EditarMarca.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

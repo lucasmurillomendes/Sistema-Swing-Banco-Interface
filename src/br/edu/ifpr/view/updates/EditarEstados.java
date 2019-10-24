@@ -9,6 +9,7 @@ import br.edu.ifpr.bean.Estado;
 import br.edu.ifpr.dao.EstadoDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.GenericComboBoxModel;
+import br.edu.ifpr.util.IniciaComboBox;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -30,27 +31,8 @@ public class EditarEstados extends javax.swing.JFrame {
      */
     public EditarEstados() throws Exception {
         initComponents();
-        iniciarComboBox();
+      new IniciaComboBox().iniciarComboBoxEstado(cbEstado);
         
-    }
-
-    public void iniciarComboBox() throws Exception {
-        //ESTADO
-        modelEstado = new GenericComboBoxModel();
-
-        Connection con = ConnectionFactory.createConnectionToMySQL();
-
-        EstadoDAO estDAO = new EstadoDAO(con);
-
-        for (int i = 1; i < estDAO.retornaQTD(); i++) {
-            if (estDAO.retrieve(i) != null) {
-                Estado estado = estDAO.retrieve(i);
-                modelEstado.addElement(estado);
-            }
-
-        }
-        cbEstado.setModel(modelEstado);
-
     }
 
     /**

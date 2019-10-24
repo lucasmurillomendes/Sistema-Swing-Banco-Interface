@@ -19,11 +19,11 @@ import javax.swing.JOptionPane;
  * @author lucas
  */
 public class CadastrarCategoria extends javax.swing.JFrame {
-
+     private Connection con = ConnectionFactory.createConnectionToMySQL();
     /**
      * Creates new form CadastrarCategoria
      */
-    public CadastrarCategoria() {
+    public CadastrarCategoria() throws SQLException {
         initComponents();
     }
 
@@ -111,13 +111,9 @@ public class CadastrarCategoria extends javax.swing.JFrame {
                     + "preenchimento. Cuidado!", "Erro falta de prrenchimento", 
                     JOptionPane.ERROR_MESSAGE);
         }else{
-                  try {
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-            
             Categoria categoria = new Categoria(0, txDescricao.getText());
             CategoriaDAO dao = new CategoriaDAO(con);
             dao.create(categoria);
-            
             int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
                     + " deseja fazer mais cadastros?");
             // 0= Sim, 1= Não
@@ -125,9 +121,6 @@ public class CadastrarCategoria extends javax.swing.JFrame {
             if (input == 1) {
                 this.dispose();
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(CadastrarCategoria.class.getName()).log(Level.SEVERE, null, ex);
-        }
         }
   
     }//GEN-LAST:event_btnCadastrarActionPerformed
@@ -166,7 +159,11 @@ public class CadastrarCategoria extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CadastrarCategoria().setVisible(true);
+                try {
+                    new CadastrarCategoria().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(CadastrarCategoria.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
