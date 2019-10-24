@@ -6,18 +6,45 @@
 package br.edu.ifpr.view.deletes;
 
 import br.edu.ifpr.bean.Marca;
+import br.edu.ifpr.dao.MarcaDAO;
+import br.edu.ifpr.util.ConnectionFactory;
+import br.edu.ifpr.util.GenericComboBoxModel;
+import java.sql.Connection;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author lucas
  */
 public class ApagarMarca extends javax.swing.JFrame {
-
+     private GenericComboBoxModel<Marca> marcaModel;
     /**
      * Creates new form ApagarMarca
      */
     public ApagarMarca() {
         initComponents();
+         iniciarComboBox();
+        txId.setEditable(false);
+        txDescricao.setEditable(false);
+    }
+    public void iniciarComboBox() {
+        try {
+            Connection con = ConnectionFactory.createConnectionToMySQL();
+            //CATEGORIA
+            marcaModel = new GenericComboBoxModel();
+            MarcaDAO mDAO = new MarcaDAO(con);
+
+            for (int i = 1; i < mDAO.retornaQTD(); i++) {
+                if (mDAO.retrieve(i) != null) {
+                    Marca marca = mDAO.retrieve(i);
+                    marcaModel.addElement(marca);
+                }
+            }
+            cbMarca.setModel(marcaModel);
+        } catch (SQLException ex) {
+           System.out.println(ex);
+        }
     }
 
     /**
@@ -33,22 +60,39 @@ public class ApagarMarca extends javax.swing.JFrame {
         Apagar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lblCategoria = new javax.swing.JLabel();
-        cbCategoria = new javax.swing.JComboBox<>();
+        cbMarca = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txId = new javax.swing.JTextField();
         txDescricao = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocation(new java.awt.Point(500, 300));
 
         Cancelar.setText("Cancelar");
+        Cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelarActionPerformed(evt);
+            }
+        });
 
         Apagar.setText("Apagar");
+        Apagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ApagarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         jLabel1.setText("Apagar Marcas");
 
         lblCategoria.setText("Marca:");
+
+        cbMarca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbMarcaActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("ID:");
 
@@ -83,8 +127,8 @@ public class ApagarMarca extends javax.swing.JFrame {
                         .addGap(37, 37, 37)
                         .addComponent(lblCategoria)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(40, Short.MAX_VALUE))
+                        .addComponent(cbMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,7 +138,7 @@ public class ApagarMarca extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCategoria)
-                    .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -112,6 +156,40 @@ public class ApagarMarca extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CancelarActionPerformed
+
+    private void ApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApagarActionPerformed
+      try {
+            GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
+
+            Connection con = ConnectionFactory.createConnectionToMySQL();
+          MarcaDAO mDAO = new MarcaDAO(con);
+          
+            mDAO.delete(cBoxMarca.getSelectedItem().getId());
+            int id = cBoxMarca.getSelectedItem().getId();
+            if (mDAO.retrieve(id) == null) {
+                int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
+                        + " deseja apagar mais?");
+                // 0= Sim, 1= Não, 2= Cancelar
+                if (input == 1) {
+                    this.dispose();
+                }
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+    }//GEN-LAST:event_ApagarActionPerformed
+
+    private void cbMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMarcaActionPerformed
+       GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
+       txId.setText(String.valueOf(cBoxMarca.getSelectedItem().getId()));
+        txDescricao.setText(cBoxMarca.getSelectedItem().getDescricao());
+    }//GEN-LAST:event_cbMarcaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -151,7 +229,7 @@ public class ApagarMarca extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Apagar;
     private javax.swing.JButton Cancelar;
-    private javax.swing.JComboBox<Marca> cbCategoria;
+    private javax.swing.JComboBox<Marca> cbMarca;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

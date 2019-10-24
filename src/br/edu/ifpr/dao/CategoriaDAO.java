@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -99,7 +100,10 @@ public class CategoriaDAO implements Dao<Integer, Categoria> {
             query.close();
 
         } catch (SQLException e) {
-            System.out.println("SQL exception ocorred " + e);
+             JOptionPane.showMessageDialog(null, "Esse erro ocorreu por que você tentou apagar um"
+                   + " registro que está referênciado em outra tabela de registros. \n"
+                   + " Apague Primeiro o veículo que usa essa Categoria!" ,
+                   "Erro ao Apagar Registro", JOptionPane.ERROR_MESSAGE);
         }
     }
 

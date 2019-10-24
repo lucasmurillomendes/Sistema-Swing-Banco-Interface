@@ -6,20 +6,49 @@
 package br.edu.ifpr.view.deletes;
 
 import br.edu.ifpr.bean.Estado;
+import br.edu.ifpr.dao.EstadoDAO;
+import br.edu.ifpr.util.ConnectionFactory;
+import br.edu.ifpr.util.GenericComboBoxModel;
+import br.edu.ifpr.view.updates.EditarCategoria;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author lucas
  */
 public class ApagarEstados extends javax.swing.JFrame {
-
+    private GenericComboBoxModel<Estado> estadoModel;
     /**
      * Creates new form ApagarEstados
      */
     public ApagarEstados() {
         initComponents();
+        iniciarComboBox();
+        txId.setEditable(false);
+        txNome.setEditable(false);
     }
+    public void iniciarComboBox() {
+        try {
+            Connection con = ConnectionFactory.createConnectionToMySQL();
+            //CATEGORIA
+            estadoModel = new GenericComboBoxModel();
+            EstadoDAO eDAO = new EstadoDAO(con);
 
+            for (int i = 1; i < eDAO.retornaQTD(); i++) {
+                if (eDAO.retrieve(i) != null) {
+                    Estado estado = eDAO.retrieve(i);
+                    estadoModel.addElement(estado);
+                }
+            }
+            cbEstado.setModel(estadoModel);
+        } catch (SQLException ex) {
+            Logger.getLogger(EditarCategoria.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,22 +62,39 @@ public class ApagarEstados extends javax.swing.JFrame {
         Apagar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lblCategoria = new javax.swing.JLabel();
-        cbCategoria = new javax.swing.JComboBox<>();
+        cbEstado = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txId = new javax.swing.JTextField();
-        txDescricao = new javax.swing.JTextField();
+        txNome = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocation(new java.awt.Point(500, 300));
 
         Cancelar.setText("Cancelar");
+        Cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelarActionPerformed(evt);
+            }
+        });
 
-        Apagar.setText("Apagar");
+        Apagar.setText("Apagar Estado");
+        Apagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ApagarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         jLabel1.setText("Apagar Estados");
 
         lblCategoria.setText("Estado: ");
+
+        cbEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbEstadoActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("ID:");
 
@@ -64,7 +110,7 @@ public class ApagarEstados extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txNome, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                             .addGap(126, 126, 126)
@@ -80,14 +126,14 @@ public class ApagarEstados extends javax.swing.JFrame {
                                     .addComponent(jLabel1))
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(4, 4, 4)
-                                    .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGap(8, 8, 8)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txId, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -97,7 +143,7 @@ public class ApagarEstados extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCategoria)
-                    .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -105,7 +151,7 @@ public class ApagarEstados extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Cancelar)
@@ -115,6 +161,39 @@ public class ApagarEstados extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void ApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApagarActionPerformed
+         try {
+            GenericComboBoxModel<Estado> cBoxEstado = (GenericComboBoxModel<Estado>) cbEstado.getModel();
+
+            Connection con = ConnectionFactory.createConnectionToMySQL();
+            EstadoDAO eDAO = new EstadoDAO(con);
+
+            eDAO.delete(cBoxEstado.getSelectedItem().getId());
+            int id = cBoxEstado.getSelectedItem().getId();
+            if (eDAO.retrieve(id) == null) {
+                int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
+                        + " deseja apagar mais?");
+                // 0= Sim, 1= Não, 2= Cancelar
+                if (input == 1) {
+                    this.dispose();
+                }
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }//GEN-LAST:event_ApagarActionPerformed
+
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CancelarActionPerformed
+
+    private void cbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEstadoActionPerformed
+       GenericComboBoxModel<Estado> cBoxEstado = (GenericComboBoxModel<Estado>) cbEstado.getModel();
+         txId.setText(String.valueOf(cBoxEstado.getSelectedItem().getId()));
+        txNome.setText(cBoxEstado.getSelectedItem().getNome());
+    }//GEN-LAST:event_cbEstadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -154,12 +233,12 @@ public class ApagarEstados extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Apagar;
     private javax.swing.JButton Cancelar;
-    private javax.swing.JComboBox<Estado> cbCategoria;
+    private javax.swing.JComboBox<Estado> cbEstado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel lblCategoria;
-    private javax.swing.JTextField txDescricao;
     private javax.swing.JTextField txId;
+    private javax.swing.JTextField txNome;
     // End of variables declaration//GEN-END:variables
 }

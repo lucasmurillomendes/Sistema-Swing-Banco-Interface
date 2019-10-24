@@ -6,6 +6,13 @@
 package br.edu.ifpr.view.deletes;
 
 import br.edu.ifpr.bean.Categoria;
+import br.edu.ifpr.bean.Municipio;
+import br.edu.ifpr.dao.MunicipioDAO;
+import br.edu.ifpr.util.ConnectionFactory;
+import br.edu.ifpr.util.GenericComboBoxModel;
+import java.sql.Connection;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,11 +20,36 @@ import br.edu.ifpr.bean.Categoria;
  */
 public class ApagarMunicipio extends javax.swing.JFrame {
 
+    private GenericComboBoxModel<Municipio> municipioModel;
+
     /**
      * Creates new form ApagarMunicipio
      */
     public ApagarMunicipio() {
         initComponents();
+        iniciarComboBox();
+        txEstado.setEditable(false);
+        txId.setEditable(false);
+        txNome.setEditable(false);
+    }
+
+    public void iniciarComboBox() {
+        try {
+            Connection con = ConnectionFactory.createConnectionToMySQL();
+            //CATEGORIA
+            municipioModel = new GenericComboBoxModel();
+            MunicipioDAO mDAO = new MunicipioDAO(con);
+
+            for (int i = 1; i < mDAO.retornaQTD(); i++) {
+                if (mDAO.retrieve(i) != null) {
+                    Municipio municipio = mDAO.retrieve(i);
+                    municipioModel.addElement(municipio);
+                }
+            }
+            cbMunicipio.setModel(municipioModel);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
     }
 
     /**
@@ -32,7 +64,7 @@ public class ApagarMunicipio extends javax.swing.JFrame {
         Apagar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lblCategoria = new javax.swing.JLabel();
-        cbCategoria = new javax.swing.JComboBox<>();
+        cbMunicipio = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txId = new javax.swing.JTextField();
@@ -42,13 +74,25 @@ public class ApagarMunicipio extends javax.swing.JFrame {
         Cancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocation(new java.awt.Point(500, 300));
 
         Apagar.setText("Apagar");
+        Apagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ApagarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         jLabel1.setText("Apagar Município");
 
         lblCategoria.setText("Categoria: ");
+
+        cbMunicipio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbMunicipioActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("ID:");
 
@@ -57,6 +101,11 @@ public class ApagarMunicipio extends javax.swing.JFrame {
         jLabel4.setText("Estado:");
 
         Cancelar.setText("Cancelar");
+        Cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -77,7 +126,7 @@ public class ApagarMunicipio extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(10, 10, 10))
-                            .addComponent(cbCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(cbMunicipio, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(59, 59, 59)
                         .addComponent(jLabel2)
@@ -103,7 +152,7 @@ public class ApagarMunicipio extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCategoria)
-                    .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -129,6 +178,40 @@ public class ApagarMunicipio extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_CancelarActionPerformed
+
+    private void ApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApagarActionPerformed
+        try {
+            GenericComboBoxModel<Municipio> cBoxMunicipio = (GenericComboBoxModel<Municipio>) cbMunicipio.getModel();
+
+            Connection con = ConnectionFactory.createConnectionToMySQL();
+            MunicipioDAO mDAO = new MunicipioDAO(con);
+
+            mDAO.delete(cBoxMunicipio.getSelectedItem().getId());
+            int id = cBoxMunicipio.getSelectedItem().getId();
+            if (mDAO.retrieve(id) == null) {
+                int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
+                        + " deseja apagar mais?");
+                // 0= Sim, 1= Não, 2= Cancelar
+                if (input == 1) {
+                    this.dispose();
+                }
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }//GEN-LAST:event_ApagarActionPerformed
+
+    private void cbMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMunicipioActionPerformed
+        GenericComboBoxModel<Municipio> cBoxMunicipio = (GenericComboBoxModel<Municipio>) cbMunicipio.getModel();
+        txId.setText(String.valueOf(cBoxMunicipio.getSelectedItem().getId()));
+        txNome.setText(cBoxMunicipio.getSelectedItem().getNome());
+        txEstado.setText(cBoxMunicipio.getSelectedItem().getEstado().getNome());
+    }//GEN-LAST:event_cbMunicipioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -168,7 +251,7 @@ public class ApagarMunicipio extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Apagar;
     private javax.swing.JButton Cancelar;
-    private javax.swing.JComboBox<Categoria> cbCategoria;
+    private javax.swing.JComboBox<Municipio> cbMunicipio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

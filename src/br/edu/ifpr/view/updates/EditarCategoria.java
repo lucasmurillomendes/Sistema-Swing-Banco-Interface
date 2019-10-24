@@ -27,6 +27,7 @@ public class EditarCategoria extends javax.swing.JFrame {
         initComponents();
         iniciarComboBox();
         txId.setEditable(false);
+        
 
     }
     public void iniciarComboBox(){
@@ -67,6 +68,8 @@ public class EditarCategoria extends javax.swing.JFrame {
         txDescricao = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocation(new java.awt.Point(500, 300));
+        setResizable(false);
 
         Cancelar.setText("Cancelar");
         Cancelar.addActionListener(new java.awt.event.ActionListener() {

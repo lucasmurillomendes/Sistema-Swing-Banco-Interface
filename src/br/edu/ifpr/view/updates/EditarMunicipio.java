@@ -96,6 +96,7 @@ public class EditarMunicipio extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocation(new java.awt.Point(500, 300));
 
         btnAtualizar.setText("Atualizar Municipio");
         btnAtualizar.addActionListener(new java.awt.event.ActionListener() {

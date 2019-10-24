@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -116,7 +117,10 @@ public class MunicipioDAO implements Dao<Integer, Municipio> {
             query.close();
 
         } catch (SQLException ex) {
-            System.out.println("SQL exception occured" + ex);
+            JOptionPane.showMessageDialog(null, "Esse erro ocorreu por que você tentou apagar um"
+                   + " registro que está referênciado em outra tabela de registros. \n"
+                   + " Apague Primeiro o veículo que usa esse Municipio!" ,
+                   "Erro ao Apagar Registro", JOptionPane.ERROR_MESSAGE);
         }
     }
 

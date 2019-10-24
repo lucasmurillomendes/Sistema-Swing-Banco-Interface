@@ -76,7 +76,8 @@ public class EditarProprietarios extends javax.swing.JFrame {
         txNascimento = new javax.swing.JTextField();
         txRg = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocation(new java.awt.Point(500, 300));
 
         btnCancela.setText("Cancelar");
         btnCancela.addActionListener(new java.awt.event.ActionListener() {

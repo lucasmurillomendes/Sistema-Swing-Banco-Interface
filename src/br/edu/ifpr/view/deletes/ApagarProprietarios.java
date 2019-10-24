@@ -64,7 +64,7 @@ public class ApagarProprietarios extends javax.swing.JFrame {
         jtProprietario = new javax.swing.JTable();
         btnApagar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setLocation(new java.awt.Point(300, 170));
 
         btnCancelar.setText("Cancelar");

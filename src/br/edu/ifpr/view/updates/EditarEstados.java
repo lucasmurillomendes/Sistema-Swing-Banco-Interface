@@ -74,7 +74,8 @@ public class EditarEstados extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setLocation(new java.awt.Point(500, 200));
+        setLocation(new java.awt.Point(500, 300));
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         jLabel1.setText("Editar Estados Cadastrados");
