@@ -66,7 +66,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem6">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Consultar/Apagar Ve&#xed;culos"/>
+                <Property name="text" type="java.lang.String" value="Consultar  Ve&#xed;culos"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem6ActionPerformed"/>
@@ -74,7 +74,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuListarProprietario">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Consultar/Apagar Propriet&#xe1;rios"/>
+                <Property name="text" type="java.lang.String" value="Consultar Propriet&#xe1;rios"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuListarProprietarioActionPerformed"/>
@@ -139,7 +139,7 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Listar/Apagar"/>
+            <Property name="text" type="java.lang.String" value="Apagar"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem8">

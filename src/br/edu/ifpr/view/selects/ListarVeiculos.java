@@ -60,7 +60,6 @@ public class ListarVeiculos extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtVeiculos = new javax.swing.JTable();
-        btnApagar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -82,14 +81,7 @@ public class ListarVeiculos extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jtVeiculos);
 
-        btnApagar.setText("Apagar Registro Selecionado");
-        btnApagar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnApagarActionPerformed(evt);
-            }
-        });
-
-        btnCancelar.setText("Cancelar");
+        btnCancelar.setText("Sair");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
@@ -105,15 +97,12 @@ public class ListarVeiculos extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addContainerGap(374, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnCancelar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnApagar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1)))
+                        .addComponent(btnCancelar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -124,9 +113,7 @@ public class ListarVeiculos extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnApagar)
-                    .addComponent(btnCancelar))
+                .addComponent(btnCancelar)
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
@@ -136,36 +123,6 @@ public class ListarVeiculos extends javax.swing.JFrame {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
-
-    private void btnApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApagarActionPerformed
-        // Busca a linha selecionada da tabela
-        int linhaSelecionada = jtVeiculos.getSelectedRow();
-        // Verifica se existe uma linha selecionada
-        if (linhaSelecionada != -1) {
-            try {
-                // Recupera o modelo da tbCliente
-                VeiculoTableModel tbmVeiculo = (VeiculoTableModel) jtVeiculos.getModel();
-                Connection con = ConnectionFactory.createConnectionToMySQL();
-                VeiculoDAO dao = new VeiculoDAO(con);
-
-                dao.delete(tbmVeiculo.getVeiculo(linhaSelecionada).getId());
-
-                int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
-                        + " deseja fazer mais cadastros?");
-                // 0= Sim, 1= Não, 2= Cancelar
-                if (input == 0) {
-                    if (linhaSelecionada != -1) {
-                        tbmVeiculo.removeLinha(linhaSelecionada);
-                    }
-                } else {
-                    this.dispose();
-                }
-
-            } catch (Exception ex) {
-                Logger.getLogger(ListarVeiculos.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_btnApagarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -206,7 +163,6 @@ public class ListarVeiculos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnApagar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

@@ -18,6 +18,8 @@ import br.edu.ifpr.view.creates.CadastrarMunicipio;
 import br.edu.ifpr.view.deletes.ApagarCategoria;
 import br.edu.ifpr.view.deletes.ApagarMarca;
 import br.edu.ifpr.view.deletes.ApagarMunicipio;
+import br.edu.ifpr.view.selects.ListarProprietarios;
+import br.edu.ifpr.view.selects.ListarVeiculos;
 import br.edu.ifpr.view.updates.EditarCategoria;
 import br.edu.ifpr.view.updates.EditarMarca;
 import br.edu.ifpr.view.updates.EditarMunicipio;
@@ -136,7 +138,7 @@ public class Principal extends javax.swing.JFrame {
 
         jMenu2.setText("Consultar");
 
-        jMenuItem6.setText("Consultar/Apagar Veículos");
+        jMenuItem6.setText("Consultar  Veículos");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem6ActionPerformed(evt);
@@ -144,7 +146,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem6);
 
-        menuListarProprietario.setText("Consultar/Apagar Proprietários");
+        menuListarProprietario.setText("Consultar Proprietários");
         menuListarProprietario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuListarProprietarioActionPerformed(evt);
@@ -206,7 +208,7 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu3.setText("Listar/Apagar");
+        jMenu3.setText("Apagar");
 
         jMenuItem8.setText("Apagar Estado");
         jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
@@ -281,8 +283,8 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuestadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuestadoActionPerformed
-      CadastrarEstado estado = new CadastrarEstado();
-      estado.setVisible(true);
+        CadastrarEstado estado = new CadastrarEstado();
+        estado.setVisible(true);
     }//GEN-LAST:event_menuestadoActionPerformed
 
     private void menuMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMunicipioActionPerformed
@@ -295,18 +297,18 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuMunicipioActionPerformed
 
     private void menuMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMarcaActionPerformed
-       CadastrarMarca marca = new CadastrarMarca();
-       marca.setVisible(true);
+        CadastrarMarca marca = new CadastrarMarca();
+        marca.setVisible(true);
     }//GEN-LAST:event_menuMarcaActionPerformed
 
     private void menuCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCategoriaActionPerformed
-      CadastrarCategoria categoria = new CadastrarCategoria();
-      categoria.setVisible(true);
+        CadastrarCategoria categoria = new CadastrarCategoria();
+        categoria.setVisible(true);
     }//GEN-LAST:event_menuCategoriaActionPerformed
 
     private void menuProprietarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProprietarioActionPerformed
-      CadastrarProprietario proprietario = new CadastrarProprietario();
-      proprietario.setVisible(true);
+        CadastrarProprietario proprietario = new CadastrarProprietario();
+        proprietario.setVisible(true);
     }//GEN-LAST:event_menuProprietarioActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -316,32 +318,35 @@ public class Principal extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-              
+
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-        ApagarVeiculos listar = new ApagarVeiculos();
-        listar.setVisible(true);
+
+        ListarVeiculos apveic = new ListarVeiculos();
+        apveic.setVisible(true);
+
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void menuListarProprietarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuListarProprietarioActionPerformed
-       ApagarProprietarios listarP = new ApagarProprietarios();
-       listarP.setVisible(true);
+
+        ListarProprietarios propl = new ListarProprietarios();
+        propl.setVisible(true);
     }//GEN-LAST:event_menuListarProprietarioActionPerformed
 
     private void menuEditarEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditarEstadosActionPerformed
-             try {
+        try {
             EditarEstados estado = new EditarEstados();
             estado.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-      
+
     }//GEN-LAST:event_menuEditarEstadosActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         try {
-            EditarVeiculos veiculo =  new EditarVeiculos();
+            EditarVeiculos veiculo = new EditarVeiculos();
             veiculo.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
@@ -373,8 +378,8 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-       ApagarCategoria acategor = new ApagarCategoria();
-       acategor.setVisible(true);
+        ApagarCategoria acategor = new ApagarCategoria();
+        acategor.setVisible(true);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
@@ -393,13 +398,13 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
-        ApagarProprietarios propl = new ApagarProprietarios();
-        propl.setVisible(true);
+        ApagarProprietarios listarP = new ApagarProprietarios();
+        listarP.setVisible(true);
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        ApagarVeiculos apveic = new ApagarVeiculos();
-        apveic.setVisible(true);
+        ApagarVeiculos listar = new ApagarVeiculos();
+        listar.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     /**
