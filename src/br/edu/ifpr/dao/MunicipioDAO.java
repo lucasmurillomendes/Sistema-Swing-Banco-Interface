@@ -156,18 +156,4 @@ public class MunicipioDAO implements Dao<Integer, Municipio> {
         }
         return municipios;
     }
-     public Integer retornaQTD() throws SQLException {
-        String sql = "SELECT id FROM Municipio";
-
-        // Associa conexão
-        Statement query = con.createStatement();
-        // Executa SQL
-        ResultSet rs = query.executeQuery(sql);
-        int i = 0;
-        while (rs.next()) {
-            i = rs.getRow();
-        }
-
-        return i+1;
-    }
 }

@@ -12,6 +12,7 @@ import br.edu.ifpr.util.VeiculoTableModel;
 import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -38,14 +39,11 @@ public class ApagarVeiculos extends javax.swing.JFrame {
     public void listarVeiculos() {
         try {
             VeiculoDAO veiculoDAO = new VeiculoDAO(con);
-            int i = 1;
-            while (i >= 1 && i <= veiculoDAO.retornaQTD() + 1) {
-                if (veiculoDAO.retrieve(i) != null) {
-                    Veiculo veiculoLista = veiculoDAO.retrieve(i);
-                    VeiculoTableModel veiculoTable = (VeiculoTableModel) jtVeiculos.getModel();
-                    veiculoTable.addLinha(veiculoLista);
-                }
-                i++;
+            VeiculoTableModel veiculoTable = (VeiculoTableModel) jtVeiculos.getModel();         
+            List<Veiculo> veiculos = veiculoDAO.findAll();
+           
+            for (Veiculo veiculo : veiculos) {
+                 veiculoTable.addLinha(veiculo);
             }
         } catch (Exception ex) {
             Logger.getLogger(ApagarVeiculos.class.getName()).log(Level.SEVERE, null, ex);

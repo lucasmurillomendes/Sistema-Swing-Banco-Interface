@@ -215,18 +215,4 @@ public class VeiculoDAO implements Dao<Integer, Veiculo> {
         }
         return veiculos;
     }
-     public Integer retornaQTD() throws SQLException {
-        String sql = "SELECT id FROM Veiculo";
-
-        // Associa conexão
-        Statement query = con.createStatement();
-        // Executa SQL
-        ResultSet rs = query.executeQuery(sql);
-        int i = 0;
-        while (rs.next()) {
-            i = rs.getRow();
-        }
-
-        return i +1;
-    }
 }

@@ -166,18 +166,4 @@ public class ProprietarioDAO implements Dao<Integer, Proprietario> {
 
         return proprietarios;
     }
-     public Integer retornaQTD() throws SQLException {
-        String sql = "SELECT id FROM Proprietario";
-
-        // Associa conexão
-        Statement query = con.createStatement();
-        // Executa SQL
-        ResultSet rs = query.executeQuery(sql);
-        int i = 0;
-        while (rs.next()) {
-            i = rs.getRow();
-        }
-
-        return i + 1;
-    }
 }
