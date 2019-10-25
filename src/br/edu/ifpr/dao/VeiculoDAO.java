@@ -133,7 +133,7 @@ public class VeiculoDAO implements Dao<Integer, Veiculo> {
         try {
             PreparedStatement query = con.prepareStatement(sql);
             query.setString(1, entity.getPlaca());
-            query.setDate(2, entity.getAno());
+            query.setDate(2, new Date(entity.getAno().getTime()));
             query.setInt(3, entity.getCategoria().getId());
             query.setInt(4, entity.getPropietario().getId());
             query.setInt(5, entity.getMarca().getId());

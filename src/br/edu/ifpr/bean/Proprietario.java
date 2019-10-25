@@ -5,7 +5,7 @@
  */
 package br.edu.ifpr.bean;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  *

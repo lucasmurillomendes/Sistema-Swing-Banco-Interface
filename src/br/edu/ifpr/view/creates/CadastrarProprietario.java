@@ -10,6 +10,9 @@ import br.edu.ifpr.dao.ProprietarioDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -52,7 +55,7 @@ public class CadastrarProprietario extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnCadastrar = new javax.swing.JButton();
-        txNascimento = new javax.swing.JTextField();
+        txNascimento = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setLocation(new java.awt.Point(470, 200));
@@ -91,6 +94,12 @@ public class CadastrarProprietario extends javax.swing.JFrame {
                 btnCadastrarActionPerformed(evt);
             }
         });
+
+        try {
+            txNascimento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -144,7 +153,7 @@ public class CadastrarProprietario extends javax.swing.JFrame {
                         .addComponent(btnCancelar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnCadastrar)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,12 +205,13 @@ public class CadastrarProprietario extends javax.swing.JFrame {
             try {
                 Connection con = ConnectionFactory.createConnectionToMySQL();
 
-                java.util.Date data = new java.util.Date();
-                java.sql.Date dataSql = new java.sql.Date(data.getTime());
+                  SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                  Date data = df.parse(txNascimento.getText());
+                  System.out.println(df.format(data));
 
                 Proprietario proprietario = new Proprietario(0, txNome.getText(),
                         txEndereco.getText(), txBairro.getText(), txCpf.getText(),
-                        txTelefone.getText(), txRg.getText(), dataSql);
+                        txTelefone.getText(), txRg.getText(), data);
 
                 ProprietarioDAO dao = new ProprietarioDAO(con);
                 dao.create(proprietario);
@@ -214,6 +224,8 @@ public class CadastrarProprietario extends javax.swing.JFrame {
                 }
 
             } catch (SQLException ex) {
+                Logger.getLogger(CadastrarProprietario.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
                 Logger.getLogger(CadastrarProprietario.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -274,7 +286,7 @@ public class CadastrarProprietario extends javax.swing.JFrame {
     private javax.swing.JTextField txBairro;
     private javax.swing.JTextField txCpf;
     private javax.swing.JTextField txEndereco;
-    private javax.swing.JTextField txNascimento;
+    private javax.swing.JFormattedTextField txNascimento;
     private javax.swing.JTextField txNome;
     private javax.swing.JTextField txRg;
     private javax.swing.JTextField txTelefone;

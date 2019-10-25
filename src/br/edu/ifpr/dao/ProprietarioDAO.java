@@ -104,7 +104,7 @@ public class ProprietarioDAO implements Dao<Integer, Proprietario> {
             query.setString(4, entity.getCpf());
             query.setString(5, entity.getTelefone());
             query.setString(6, entity.getRg());
-            query.setDate(7, entity.getNascimento());
+            query.setDate(7, new Date(entity.getNascimento().getTime()));
             query.setInt(8, entity.getId());
 
             query.executeUpdate();

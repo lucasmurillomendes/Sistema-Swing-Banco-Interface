@@ -334,8 +334,12 @@ public class Principal extends javax.swing.JFrame {
 
     private void menuListarProprietarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuListarProprietarioActionPerformed
 
-        ListarProprietarios propl = new ListarProprietarios();
-        propl.setVisible(true);
+        try {
+            ListarProprietarios propl = new ListarProprietarios();
+            propl.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_menuListarProprietarioActionPerformed
 
     private void menuEditarEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditarEstadosActionPerformed

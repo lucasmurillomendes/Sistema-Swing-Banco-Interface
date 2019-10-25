@@ -12,20 +12,21 @@ import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.ProprietarioTableModel;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author lucas
  */
 public class ListarProprietarios extends javax.swing.JFrame {
-
+Connection con;
     /**
      * Creates new form ListarApagarProprietarios
      */
-    public ListarProprietarios() {
+    public ListarProprietarios() throws SQLException {
+        this.con = ConnectionFactory.createConnectionToMySQL();
         initComponents();
         ProprietarioTableModel model = new ProprietarioTableModel();
         jtProprietario.setModel(model);
@@ -33,22 +34,11 @@ public class ListarProprietarios extends javax.swing.JFrame {
     }
 
     public void listaProprietario() {
-        try {
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-
-            ProprietarioDAO propDAO = new ProprietarioDAO(con);
-
-            int i = 1;
-            while (i >= 1 && i <= propDAO.retornaQTD() + 1) {
-                if (propDAO.retrieve(i) != null) {
-                    Proprietario proprietarioLista = propDAO.retrieve(i);
-                    ProprietarioTableModel veiculoTable = (ProprietarioTableModel) jtProprietario.getModel();
-                    veiculoTable.addLinha(proprietarioLista);
-                }
-                i++;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ApagarVeiculos.class.getName()).log(Level.SEVERE, null, ex);
+        ProprietarioDAO propDAO = new ProprietarioDAO(con);
+        List<Proprietario> proprietarios = propDAO.findAll();
+        ProprietarioTableModel veiculoTable = (ProprietarioTableModel) jtProprietario.getModel();
+        for (Proprietario proprietario : proprietarios) {
+            veiculoTable.addLinha(proprietario);
         }
     }
 
@@ -160,7 +150,11 @@ public class ListarProprietarios extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new ListarProprietarios().setVisible(true);
+            try {
+                new ListarProprietarios().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(ListarProprietarios.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
 
