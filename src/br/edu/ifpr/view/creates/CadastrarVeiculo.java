@@ -243,7 +243,8 @@ public class CadastrarVeiculo extends javax.swing.JFrame {
                     }
                 }
             } catch (ParseException ex) {
-                Logger.getLogger(CadastrarVeiculo.class.getName()).log(Level.SEVERE, null, ex);
+               JOptionPane.showMessageDialog(null, "Formato de data incorreto!", 
+               "Erro!", JOptionPane.ERROR_MESSAGE);
             }
         }
 

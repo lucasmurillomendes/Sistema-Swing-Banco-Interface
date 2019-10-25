@@ -15,7 +15,9 @@ import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.GenericComboBoxModel;
 import br.edu.ifpr.util.IniciaComboBox;
 import java.sql.Connection;
-import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -251,31 +253,37 @@ public class EditarVeiculos extends javax.swing.JFrame {
                     + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
                     JOptionPane.ERROR_MESSAGE);
         } else {
-            //Colocando data (errado)
-            java.util.Date data = new java.util.Date();
-            java.sql.Date dataSql = new java.sql.Date(data.getTime());
-            //Recuperando Veiculo
-            GenericComboBoxModel<Veiculo> cBoxVeiculo = (GenericComboBoxModel<Veiculo>) cbVeiculo.getModel();
-            //Recuperando Proprietário
-            GenericComboBoxModel<Proprietario> cBoxProprietario = (GenericComboBoxModel<Proprietario>) cbProprietario.getModel();
-            //Recuperando Municipio
-            GenericComboBoxModel<Municipio> cBoxMunicipio = (GenericComboBoxModel<Municipio>) cbMunicipio.getModel();
-            //Recuperando Marca
-            GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
-            //Recuperando Categoria
-            GenericComboBoxModel<Categoria> cBoxCategoria = (GenericComboBoxModel<Categoria>) cbCategoria.getModel();
-            //Criando Veículo
-            Veiculo veiculo = new Veiculo(cBoxVeiculo.getSelectedItem().getId(), txPlaca.getText(), dataSql,
-                    cBoxCategoria.getSelectedItem(), cBoxProprietario.getSelectedItem(),
-                    cBoxMarca.getSelectedItem(), cBoxMunicipio.getSelectedItem());
-            VeiculoDAO dao = new VeiculoDAO(con);
-            dao.update(veiculo);
-            int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
-                    + " deseja fazer mais cadastros?");
-            // 0= Sim, 1= Não
-            System.out.println(input);
-            if (input == 1) {
-                this.dispose();
+            try {
+                //Colocando data (errado)
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                Date data = df.parse(txAno.getText());
+                //Recuperando Veiculo
+                GenericComboBoxModel<Veiculo> cBoxVeiculo = (GenericComboBoxModel<Veiculo>) cbVeiculo.getModel();
+                //Recuperando Proprietário
+                GenericComboBoxModel<Proprietario> cBoxProprietario = (GenericComboBoxModel<Proprietario>) cbProprietario.getModel();
+                //Recuperando Municipio
+                GenericComboBoxModel<Municipio> cBoxMunicipio = (GenericComboBoxModel<Municipio>) cbMunicipio.getModel();
+                //Recuperando Marca
+                GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
+                //Recuperando Categoria
+                GenericComboBoxModel<Categoria> cBoxCategoria = (GenericComboBoxModel<Categoria>) cbCategoria.getModel();
+                
+                //Criando Veículo
+                Veiculo veiculo = new Veiculo(cBoxVeiculo.getSelectedItem().getId(), txPlaca.getText(), data,
+                        cBoxCategoria.getSelectedItem(), cBoxProprietario.getSelectedItem(),
+                        cBoxMarca.getSelectedItem(), cBoxMunicipio.getSelectedItem());
+                VeiculoDAO dao = new VeiculoDAO(con);
+                dao.update(veiculo);
+                int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
+                        + " deseja fazer mais cadastros?");
+                // 0= Sim, 1= Não
+                System.out.println(input);
+                if (input == 1) {
+                    this.dispose();
+                }
+            } catch (ParseException ex) {
+              JOptionPane.showMessageDialog(null, "Formato de data incorreto!", 
+               "Erro!", JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -288,6 +296,7 @@ public class EditarVeiculos extends javax.swing.JFrame {
     private void cbVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbVeiculoActionPerformed
         GenericComboBoxModel<Veiculo> cBoxVeiculo = (GenericComboBoxModel<Veiculo>) cbVeiculo.getModel();
         txPlaca.setText(cBoxVeiculo.getSelectedItem().getPlaca());
+        txAno.setText(String.valueOf(cBoxVeiculo.getSelectedItem().getAno()));
     }//GEN-LAST:event_cbVeiculoActionPerformed
 
     /**

@@ -226,7 +226,8 @@ public class CadastrarProprietario extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(CadastrarProprietario.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
-                Logger.getLogger(CadastrarProprietario.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Formato de data incorreto!", 
+               "Erro!", JOptionPane.ERROR_MESSAGE);
             }
         }
 

@@ -16,6 +16,7 @@ import br.edu.ifpr.view.creates.CadastrarVeiculo;
 import br.edu.ifpr.view.creates.CadastrarCategoria;
 import br.edu.ifpr.view.creates.CadastrarMunicipio;
 import br.edu.ifpr.view.deletes.ApagarCategoria;
+import br.edu.ifpr.view.deletes.ApagarEstados;
 import br.edu.ifpr.view.deletes.ApagarMarca;
 import br.edu.ifpr.view.deletes.ApagarMunicipio;
 import br.edu.ifpr.view.selects.ListarProprietarios;
@@ -27,6 +28,7 @@ import br.edu.ifpr.view.updates.EditarProprietarios;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -51,14 +53,15 @@ public class Principal extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuVeiculo = new javax.swing.JMenu();
         menuestado = new javax.swing.JMenuItem();
         menuMunicipio = new javax.swing.JMenuItem();
         menuMarca = new javax.swing.JMenuItem();
         menuCategoria = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
         menuProprietario = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
         menuListarProprietario = new javax.swing.JMenuItem();
@@ -83,6 +86,13 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 36)); // NOI18N
         jLabel1.setText("Sistema Cadastro");
+
+        jButton1.setText("Sair");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         menuVeiculo.setText("Cadastrar");
 
@@ -118,14 +128,6 @@ public class Principal extends javax.swing.JFrame {
         });
         menuVeiculo.add(menuCategoria);
 
-        jMenuItem1.setText("Cadastrar Veículo");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        menuVeiculo.add(jMenuItem1);
-
         menuProprietario.setText("Cadastrar Proprietário");
         menuProprietario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -133,6 +135,14 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         menuVeiculo.add(menuProprietario);
+
+        jMenuItem1.setText("Cadastrar Veículo");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        menuVeiculo.add(jMenuItem1);
 
         jMenuBar1.add(menuVeiculo);
 
@@ -166,7 +176,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu1.add(menuEditarEstados);
 
-        jMenuItem7.setText("EditarMunicipio");
+        jMenuItem7.setText("Editar Municipio");
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem7ActionPerformed(evt);
@@ -270,13 +280,19 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(79, 79, 79)
                 .addComponent(jLabel1)
                 .addContainerGap(91, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(88, 88, 88)
                 .addComponent(jLabel1)
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -327,8 +343,12 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
 
-        ListarVeiculos apveic = new ListarVeiculos();
-        apveic.setVisible(true);
+        try {
+            ListarVeiculos apveic = new ListarVeiculos();
+            apveic.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
@@ -395,8 +415,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         try {
-            ApagarCategoria acategor = new ApagarCategoria();
-            acategor.setVisible(true);
+            ApagarEstados estado = new ApagarEstados();
+            estado.setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -447,6 +467,12 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       JOptionPane.showMessageDialog(null, "Obrigado por usar nosso sistema!", 
+               "Volte sempre!", JOptionPane.PLAIN_MESSAGE);
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -483,6 +509,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

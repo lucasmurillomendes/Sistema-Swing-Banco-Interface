@@ -11,6 +11,7 @@ import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.ProprietarioTableModel;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -35,20 +36,11 @@ public class ApagarProprietarios extends javax.swing.JFrame {
     }
 
     public void listaProprietario() {
-        try {
-            ProprietarioDAO propDAO = new ProprietarioDAO(con);
-
-            int i = 1;
-            while (i >= 1 && i <= propDAO.retornaQTD() + 1) {
-                if (propDAO.retrieve(i) != null) {
-                    Proprietario proprietarioLista = propDAO.retrieve(i);
-                    ProprietarioTableModel veiculoTable = (ProprietarioTableModel) jtProprietario.getModel();
-                    veiculoTable.addLinha(proprietarioLista);
-                }
-                i++;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ApagarVeiculos.class.getName()).log(Level.SEVERE, null, ex);
+        ProprietarioDAO propDAO = new ProprietarioDAO(con);
+        List<Proprietario> proprietarios = propDAO.findAll();
+        ProprietarioTableModel veiculoTable = (ProprietarioTableModel) jtProprietario.getModel();
+        for (Proprietario proprietario : proprietarios) {
+            veiculoTable.addLinha(proprietario);
         }
     }
 
@@ -78,7 +70,7 @@ public class ApagarProprietarios extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel1.setText("Listar Apagar Proprietários");
+        jLabel1.setText("        Apagar Proprietários");
 
         jtProprietario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -107,17 +99,17 @@ public class ApagarProprietarios extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 205, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addGap(141, 255, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 680, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnCancelar)
                         .addGap(18, 18, 18)
                         .addComponent(btnApagar)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(251, 251, 251)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

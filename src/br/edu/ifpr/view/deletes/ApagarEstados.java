@@ -148,8 +148,11 @@ public class ApagarEstados extends javax.swing.JFrame {
 
     private void ApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApagarActionPerformed
         GenericComboBoxModel<Estado> cBoxEstado = (GenericComboBoxModel<Estado>) cbEstado.getModel();
+        
         EstadoDAO eDAO = new EstadoDAO(con);
-        eDAO.delete(cBoxEstado.getSelectedItem().getId());
+        
+       eDAO.delete(cBoxEstado.getSelectedItem().getId());
+        System.out.println(cBoxEstado.getSelectedItem().getId());
         int id = cBoxEstado.getSelectedItem().getId();
         if (eDAO.retrieve(id) == null) {
             int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"

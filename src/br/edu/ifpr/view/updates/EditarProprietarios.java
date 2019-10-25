@@ -12,6 +12,9 @@ import br.edu.ifpr.util.GenericComboBoxModel;
 import br.edu.ifpr.util.IniciaComboBox;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -241,22 +244,25 @@ public class EditarProprietarios extends javax.swing.JFrame {
                     + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
                     JOptionPane.ERROR_MESSAGE);
         } else {
-            //Colocando data (errado)
-            java.util.Date data = new java.util.Date();
-            java.sql.Date dataSql = new java.sql.Date(data.getTime());
 
             if (cBoxProprietario.getSelectedItem() != null) {
-                ProprietarioDAO dao = new ProprietarioDAO(con);
-
-                Proprietario atualiza = new Proprietario(cBoxProprietario.getSelectedItem().getId(),
-                        txNome.getText(), txEndereco.getText(), txBairro.getText(),
-                        txCpf.getText(), txTelefone.getText(), txRg.getText(), dataSql);
-                dao.update(atualiza);
-                int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
-                        + " deseja fazer mais edições?");
-                // 0= Sim, 1= Não
-                if (input == 1) {
-                    this.dispose();
+                try {
+                    ProprietarioDAO dao = new ProprietarioDAO(con);
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                    Date data = df.parse(txNascimento.getText());
+                    Proprietario atualiza = new Proprietario(cBoxProprietario.getSelectedItem().getId(),
+                            txNome.getText(), txEndereco.getText(), txBairro.getText(),
+                            txCpf.getText(), txTelefone.getText(), txRg.getText(), data);
+                    dao.update(atualiza);
+                    int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
+                            + " deseja fazer mais edições?");
+                    // 0= Sim, 1= Não
+                    if (input == 1) {
+                        this.dispose();
+                    }
+                } catch (ParseException ex) {
+                    JOptionPane.showMessageDialog(null, "Formato de data incorreto!", 
+               "Erro!", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 //Exibe Mensagem de Erro

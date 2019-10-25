@@ -5,7 +5,6 @@
  */
 package br.edu.ifpr.view.selects;
 
-import br.edu.ifpr.view.deletes.*;
 import br.edu.ifpr.bean.Proprietario;
 import br.edu.ifpr.dao.ProprietarioDAO;
 import br.edu.ifpr.util.ConnectionFactory;
@@ -24,6 +23,7 @@ public class ListarProprietarios extends javax.swing.JFrame {
 Connection con;
     /**
      * Creates new form ListarApagarProprietarios
+     * @throws java.sql.SQLException
      */
     public ListarProprietarios() throws SQLException {
         this.con = ConnectionFactory.createConnectionToMySQL();
@@ -67,7 +67,7 @@ Connection con;
         });
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel1.setText("Listar Apagar Proprietários");
+        jLabel1.setText("Listar  Proprietários");
 
         jtProprietario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -89,7 +89,7 @@ Connection con;
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(143, 143, 143)
                 .addComponent(jLabel1)
-                .addContainerGap(341, Short.MAX_VALUE))
+                .addContainerGap(399, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

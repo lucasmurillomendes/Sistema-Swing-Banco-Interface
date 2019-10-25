@@ -71,7 +71,7 @@ public class ApagarVeiculos extends javax.swing.JFrame {
         setLocation(new java.awt.Point(300, 170));
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel1.setText("Listar Apagar Veículos");
+        jLabel1.setText(" Apagar Veículos");
 
         jtVeiculos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -85,6 +85,12 @@ public class ApagarVeiculos extends javax.swing.JFrame {
             }
         ));
         jScrollPane1.setViewportView(jtVeiculos);
+        if (jtVeiculos.getColumnModel().getColumnCount() > 0) {
+            jtVeiculos.getColumnModel().getColumn(0).setHeaderValue("Title 1");
+            jtVeiculos.getColumnModel().getColumn(1).setHeaderValue("Title 2");
+            jtVeiculos.getColumnModel().getColumn(2).setHeaderValue("Title 3");
+            jtVeiculos.getColumnModel().getColumn(3).setHeaderValue("Title 4");
+        }
 
         btnApagar.setText("Apagar Registro Selecionado");
         btnApagar.addActionListener(new java.awt.event.ActionListener() {
@@ -104,20 +110,20 @@ public class ApagarVeiculos extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(143, 143, 143)
-                .addComponent(jLabel1)
-                .addContainerGap(374, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnCancelar)
                         .addGap(18, 18, 18)
                         .addComponent(btnApagar)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(278, 278, 278))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

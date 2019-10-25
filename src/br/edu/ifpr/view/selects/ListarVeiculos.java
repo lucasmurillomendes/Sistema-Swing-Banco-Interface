@@ -10,6 +10,8 @@ import br.edu.ifpr.dao.VeiculoDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.VeiculoTableModel;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -20,34 +22,34 @@ import javax.swing.JOptionPane;
  */
 public class ListarVeiculos extends javax.swing.JFrame {
 
+    Connection con;
+
     /**
      * Creates new form ListarApagarVeiculos
      */
-    public ListarVeiculos() {
+    public ListarVeiculos() throws SQLException {
+        this.con = ConnectionFactory.createConnectionToMySQL();
         initComponents();
         VeiculoTableModel model = new VeiculoTableModel();
         jtVeiculos.setModel(model);
         listarVeiculos();
     }
-   public void listarVeiculos() {
+
+    public void listarVeiculos() {
         try {
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-
-            VeiculoDAO veiculoDAO = new VeiculoDAO(con);
-
-            int i = 1;
-            while (i >= 1 && i <= veiculoDAO.retornaQTD() + 1) {
-                if (veiculoDAO.retrieve(i) != null) {
-                    Veiculo veiculoLista = veiculoDAO.retrieve(i);
-                    VeiculoTableModel veiculoTable = (VeiculoTableModel) jtVeiculos.getModel();
-                    veiculoTable.addLinha(veiculoLista);
-                }
-                i++;
+            VeiculoTableModel veiculoTable = (VeiculoTableModel) jtVeiculos.getModel();
+           VeiculoDAO veiculoDAO = new VeiculoDAO(con);
+           
+           List<Veiculo> veiculos = veiculoDAO.findAll();
+           
+            for (Veiculo veiculo : veiculos) {
+                 veiculoTable.addLinha(veiculo);
             }
         } catch (Exception ex) {
             System.out.println(ex);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -66,7 +68,7 @@ public class ListarVeiculos extends javax.swing.JFrame {
         setLocation(new java.awt.Point(300, 170));
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel1.setText("Listar Apagar Veículos");
+        jLabel1.setText("Listar  Veículos");
 
         jtVeiculos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -95,7 +97,7 @@ public class ListarVeiculos extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(143, 143, 143)
                 .addComponent(jLabel1)
-                .addContainerGap(374, Short.MAX_VALUE))
+                .addContainerGap(432, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,7 +159,11 @@ public class ListarVeiculos extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ListarVeiculos().setVisible(true);
+                try {
+                    new ListarVeiculos().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ListarVeiculos.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
