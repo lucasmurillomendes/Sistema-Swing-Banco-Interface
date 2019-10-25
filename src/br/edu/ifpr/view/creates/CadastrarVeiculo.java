@@ -17,6 +17,7 @@ import br.edu.ifpr.dao.ProprietarioDAO;
 import br.edu.ifpr.dao.VeiculoDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.GenericComboBoxModel;
+import br.edu.ifpr.util.IniciaComboBox;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -29,66 +30,18 @@ import javax.swing.JOptionPane;
  */
 public class CadastrarVeiculo extends javax.swing.JFrame {
 
-    private GenericComboBoxModel<Proprietario> proprietarioModel;
-    private GenericComboBoxModel<Municipio> municipiomodel;
-    private GenericComboBoxModel<Marca> marcaModel;
-    private GenericComboBoxModel<Categoria> categoriaModel;
+    Connection con = ConnectionFactory.createConnectionToMySQL();
 
     /**
      * Creates new form CadastrarVeiculo
      */
     public CadastrarVeiculo() throws Exception {
         initComponents();
-        iniciarComboBox();
-    }
-
-    public void iniciarComboBox() throws Exception {
-        Connection con = ConnectionFactory.createConnectionToMySQL();
-        //PROPRIETARIO
-        proprietarioModel = new GenericComboBoxModel();
-        ProprietarioDAO pDAO = new ProprietarioDAO(con);
-
-        for (int i = 1; i < pDAO.retornaQTD(); i++) {
-
-            if (pDAO.retrieve(i) != null) {
-                Proprietario proprietario = pDAO.retrieve(i);
-                proprietarioModel.addElement(proprietario);
-            }
-        }
-        cbProprietario.setModel(proprietarioModel);
-        // MUNICIPIO
-        municipiomodel = new GenericComboBoxModel();
-        MunicipioDAO mDAO = new MunicipioDAO(con);
-
-        for (int i = 0; i < mDAO.retornaQTD(); i++) {
-            if (mDAO.retrieve(i) != null) {
-                Municipio municipio = mDAO.retrieve(i);
-                municipiomodel.addElement(municipio);
-            }
-        }
-        cbMunicipio.setModel(municipiomodel);
-        //MARCA
-        marcaModel = new GenericComboBoxModel();
-        MarcaDAO mcDAO = new MarcaDAO(con);
-
-        for (int i = 0; i < mcDAO.retornaQTD(); i++) {
-            if (mDAO.retrieve(i) != null) {
-                Marca marca = mcDAO.retrieve(i);
-                marcaModel.addElement(marca);
-            }
-        }
-        cbMarca.setModel(marcaModel);
-        //CATEGORIA
-        categoriaModel = new GenericComboBoxModel();
-        CategoriaDAO cDAO = new CategoriaDAO(con);
-
-        for (int i = 0; i < cDAO.retornaQTD(); i++) {
-            if (cDAO.retrieve(i) != null) {
-                Categoria categoria = cDAO.retrieve(i);
-                categoriaModel.addElement(categoria);
-            }
-        }
-        cbCategoria.setModel(categoriaModel);
+        IniciaComboBox inicia = new IniciaComboBox();
+        inicia.iniciarComboBoxProprietario(cbProprietario);
+        inicia.iniciarComboBoxMunicipio(cbMunicipio);
+        inicia.iniciarComboBoxMarca(cbMarca);
+        inicia.iniciarComboBoxCategoria(cbCategoria);
     }
 
     /**
@@ -257,47 +210,40 @@ public class CadastrarVeiculo extends javax.swing.JFrame {
                     + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
                     JOptionPane.ERROR_MESSAGE);
         } else {
-            try {
-                //Colocando data (errado)
-                java.util.Date data = new java.util.Date();
-                java.sql.Date dataSql = new java.sql.Date(data.getTime());
-                // Date comparacao = dataSql;
-                //Conexão
-                Connection con = ConnectionFactory.createConnectionToMySQL();
-                //Recuperando Proprietário
-                if (cbCategoria.getSelectedItem() == null || cbMarca.getSelectedItem() == null
-                        || cbMunicipio.getSelectedItem() == null || cbProprietario.getSelectedItem() == null) {
-                    //Exibe Mensagem de Erro
-                    JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
-                            + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
-                            JOptionPane.ERROR_MESSAGE);
-                } else {
-                    GenericComboBoxModel<Proprietario> cBoxProprietario = (GenericComboBoxModel<Proprietario>) cbProprietario.getModel();
-                    //Recuperando Municipio
-                    GenericComboBoxModel<Municipio> cBoxMunicipio = (GenericComboBoxModel<Municipio>) cbMunicipio.getModel();
-                    //Recuperando Marca
-                    GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
-                    //Recuperando Categoria
-                    GenericComboBoxModel<Categoria> cBoxCategoria = (GenericComboBoxModel<Categoria>) cbCategoria.getModel();
-                    //Criando Veículo
-                    Veiculo veiculo = new Veiculo(0, txPlaca.getText(), dataSql,
-                            cBoxCategoria.getSelectedItem(), cBoxProprietario.getSelectedItem(),
-                            cBoxMarca.getSelectedItem(), cBoxMunicipio.getSelectedItem());
-
-                    VeiculoDAO dao = new VeiculoDAO(con);
-                    dao.create(veiculo);
-
-                    int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
-                            + " deseja fazer mais cadastros?");
-                    // 0= Sim, 1= Não
-                    System.out.println(input);
-                    if (input == 1) {
-                        this.dispose();
-                    }
+            //Colocando data (errado)
+            java.util.Date data = new java.util.Date();
+            java.sql.Date dataSql = new java.sql.Date(data.getTime());
+            // Date comparacao = dataSql;
+            //Recuperando Proprietário
+            if (cbCategoria.getSelectedItem() == null || cbMarca.getSelectedItem() == null
+                    || cbMunicipio.getSelectedItem() == null || cbProprietario.getSelectedItem() == null) {
+                //Exibe Mensagem de Erro
+                JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
+                        + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                GenericComboBoxModel<Proprietario> cBoxProprietario = (GenericComboBoxModel<Proprietario>) cbProprietario.getModel();
+                //Recuperando Municipio
+                GenericComboBoxModel<Municipio> cBoxMunicipio = (GenericComboBoxModel<Municipio>) cbMunicipio.getModel();
+                //Recuperando Marca
+                GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
+                //Recuperando Categoria
+                GenericComboBoxModel<Categoria> cBoxCategoria = (GenericComboBoxModel<Categoria>) cbCategoria.getModel();
+                //Criando Veículo
+                Veiculo veiculo = new Veiculo(0, txPlaca.getText(), dataSql,
+                        cBoxCategoria.getSelectedItem(), cBoxProprietario.getSelectedItem(),
+                        cBoxMarca.getSelectedItem(), cBoxMunicipio.getSelectedItem());
+                
+                VeiculoDAO dao = new VeiculoDAO(con);
+                dao.create(veiculo);
+                
+                int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
+                        + " deseja fazer mais cadastros?");
+                // 0= Sim, 1= Não
+                System.out.println(input);
+                if (input == 1) {
+                    this.dispose();
                 }
-
-            } catch (SQLException ex) {
-                Logger.getLogger(CadastrarVeiculo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

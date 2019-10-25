@@ -25,13 +25,9 @@ import javax.swing.JOptionPane;
  * @author lucas
  */
 public class EditarVeiculos extends javax.swing.JFrame {
+
     //Conexão
     Connection con = ConnectionFactory.createConnectionToMySQL();
-    private GenericComboBoxModel<Veiculo> veiculoModel;
-    private GenericComboBoxModel<Proprietario> proprietarioModel;
-    private GenericComboBoxModel<Municipio> municipiomodel;
-    private GenericComboBoxModel<Marca> marcaModel;
-    private GenericComboBoxModel<Categoria> categoriaModel;
 
     /**
      * Creates new form EditarVeiculos
@@ -45,6 +41,7 @@ public class EditarVeiculos extends javax.swing.JFrame {
         iniciar.iniciarComboBoxMarca(cbMarca);
         iniciar.iniciarComboBoxVeiculo(cbVeiculo);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -81,6 +78,12 @@ public class EditarVeiculos extends javax.swing.JFrame {
         jLabel1.setText("Editar Veículos Cadastrados");
 
         jLabel2.setText("Veículo: ");
+
+        cbVeiculo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbVeiculoActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Selecione abaixo os novos dados do veículo selecionado:");
 
@@ -236,7 +239,7 @@ public class EditarVeiculos extends javax.swing.JFrame {
     }//GEN-LAST:event_cbCategoriaActionPerformed
 
     private void btnAtualizarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarRegistroActionPerformed
-       //Verificando Campos Nulos
+        //Verificando Campos Nulos
         if (txPlaca.getText().equals("") || txAno.getText().equals("")
                 || cbVeiculo.getSelectedItem() == null
                 || cbCategoria.getSelectedItem() == null
@@ -281,6 +284,11 @@ public class EditarVeiculos extends javax.swing.JFrame {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void cbVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbVeiculoActionPerformed
+        GenericComboBoxModel<Veiculo> cBoxVeiculo = (GenericComboBoxModel<Veiculo>) cbVeiculo.getModel();
+        txPlaca.setText(cBoxVeiculo.getSelectedItem().getPlaca());
+    }//GEN-LAST:event_cbVeiculoActionPerformed
 
     /**
      * @param args the command line arguments

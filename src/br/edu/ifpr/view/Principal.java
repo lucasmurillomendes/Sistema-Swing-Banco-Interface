@@ -390,33 +390,57 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-        ApagarCategoria acategor = new ApagarCategoria();
-        acategor.setVisible(true);
+        try {
+            ApagarCategoria acategor = new ApagarCategoria();
+            acategor.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
-        ApagarMunicipio mun = new ApagarMunicipio();
-        mun.setVisible(true);
+        try {
+            ApagarMunicipio mun = new ApagarMunicipio();
+            mun.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
-        ApagarMarca mar = new ApagarMarca();
-        mar.setVisible(true);
+        try {
+            ApagarMarca mar = new ApagarMarca();
+            mar.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
-        ApagarCategoria cat = new ApagarCategoria();
-        cat.setVisible(true);
+        try {
+            ApagarCategoria cat = new ApagarCategoria();
+            cat.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
-        ApagarProprietarios listarP = new ApagarProprietarios();
-        listarP.setVisible(true);
+        try {
+            ApagarProprietarios listarP = new ApagarProprietarios();
+            listarP.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        ApagarVeiculos listar = new ApagarVeiculos();
-        listar.setVisible(true);
+        try {
+            ApagarVeiculos listar = new ApagarVeiculos();
+            listar.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     /**

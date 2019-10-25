@@ -5,13 +5,15 @@
  */
 package br.edu.ifpr.view.deletes;
 
-import br.edu.ifpr.bean.Categoria;
 import br.edu.ifpr.bean.Municipio;
 import br.edu.ifpr.dao.MunicipioDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.GenericComboBoxModel;
+import br.edu.ifpr.util.IniciaComboBox;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,36 +22,17 @@ import javax.swing.JOptionPane;
  */
 public class ApagarMunicipio extends javax.swing.JFrame {
 
-    private GenericComboBoxModel<Municipio> municipioModel;
+    Connection con = ConnectionFactory.createConnectionToMySQL();
 
     /**
      * Creates new form ApagarMunicipio
      */
-    public ApagarMunicipio() {
+    public ApagarMunicipio() throws SQLException {
         initComponents();
-        iniciarComboBox();
+        new IniciaComboBox().iniciarComboBoxMunicipio(cbMunicipio);
         txEstado.setEditable(false);
         txId.setEditable(false);
         txNome.setEditable(false);
-    }
-
-    public void iniciarComboBox() {
-        try {
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-            //CATEGORIA
-            municipioModel = new GenericComboBoxModel();
-            MunicipioDAO mDAO = new MunicipioDAO(con);
-
-            for (int i = 1; i < mDAO.retornaQTD(); i++) {
-                if (mDAO.retrieve(i) != null) {
-                    Municipio municipio = mDAO.retrieve(i);
-                    municipioModel.addElement(municipio);
-                }
-            }
-            cbMunicipio.setModel(municipioModel);
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }
     }
 
     /**
@@ -184,25 +167,17 @@ public class ApagarMunicipio extends javax.swing.JFrame {
     }//GEN-LAST:event_CancelarActionPerformed
 
     private void ApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApagarActionPerformed
-        try {
-            GenericComboBoxModel<Municipio> cBoxMunicipio = (GenericComboBoxModel<Municipio>) cbMunicipio.getModel();
-
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-            MunicipioDAO mDAO = new MunicipioDAO(con);
-
-            mDAO.delete(cBoxMunicipio.getSelectedItem().getId());
-            int id = cBoxMunicipio.getSelectedItem().getId();
-            if (mDAO.retrieve(id) == null) {
-                int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
-                        + " deseja apagar mais?");
-                // 0= Sim, 1= Não, 2= Cancelar
-                if (input == 1) {
-                    this.dispose();
-                }
+        GenericComboBoxModel<Municipio> cBoxMunicipio = (GenericComboBoxModel<Municipio>) cbMunicipio.getModel();
+        MunicipioDAO mDAO = new MunicipioDAO(con);
+        mDAO.delete(cBoxMunicipio.getSelectedItem().getId());
+        int id = cBoxMunicipio.getSelectedItem().getId();
+        if (mDAO.retrieve(id) == null) {
+            int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
+                    + " deseja apagar mais?");
+            // 0= Sim, 1= Não, 2= Cancelar
+            if (input == 1) {
+                this.dispose();
             }
-
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
         }
     }//GEN-LAST:event_ApagarActionPerformed
 
@@ -243,7 +218,11 @@ public class ApagarMunicipio extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ApagarMunicipio().setVisible(true);
+                try {
+                    new ApagarMunicipio().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ApagarMunicipio.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

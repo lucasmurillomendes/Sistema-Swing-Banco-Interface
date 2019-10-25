@@ -9,8 +9,11 @@ import br.edu.ifpr.bean.Marca;
 import br.edu.ifpr.dao.MarcaDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.GenericComboBoxModel;
+import br.edu.ifpr.util.IniciaComboBox;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,33 +21,17 @@ import javax.swing.JOptionPane;
  * @author lucas
  */
 public class ApagarMarca extends javax.swing.JFrame {
-     private GenericComboBoxModel<Marca> marcaModel;
+
+    Connection con = ConnectionFactory.createConnectionToMySQL();
+
     /**
      * Creates new form ApagarMarca
      */
-    public ApagarMarca() {
+    public ApagarMarca() throws SQLException {
         initComponents();
-         iniciarComboBox();
+        new IniciaComboBox().iniciarComboBoxMarca(cbMarca);
         txId.setEditable(false);
         txDescricao.setEditable(false);
-    }
-    public void iniciarComboBox() {
-        try {
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-            //CATEGORIA
-            marcaModel = new GenericComboBoxModel();
-            MarcaDAO mDAO = new MarcaDAO(con);
-
-            for (int i = 1; i < mDAO.retornaQTD(); i++) {
-                if (mDAO.retrieve(i) != null) {
-                    Marca marca = mDAO.retrieve(i);
-                    marcaModel.addElement(marca);
-                }
-            }
-            cbMarca.setModel(marcaModel);
-        } catch (SQLException ex) {
-           System.out.println(ex);
-        }
     }
 
     /**
@@ -158,36 +145,27 @@ public class ApagarMarca extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
-        // TODO add your handling code here:
+       this.dispose();
     }//GEN-LAST:event_CancelarActionPerformed
 
     private void ApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApagarActionPerformed
-      try {
-            GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
-
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-          MarcaDAO mDAO = new MarcaDAO(con);
-          
-            mDAO.delete(cBoxMarca.getSelectedItem().getId());
-            int id = cBoxMarca.getSelectedItem().getId();
-            if (mDAO.retrieve(id) == null) {
-                int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
-                        + " deseja apagar mais?");
-                // 0= Sim, 1= Não, 2= Cancelar
-                if (input == 1) {
-                    this.dispose();
-                }
+        GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
+        MarcaDAO mDAO = new MarcaDAO(con);
+        mDAO.delete(cBoxMarca.getSelectedItem().getId());
+        int id = cBoxMarca.getSelectedItem().getId();
+        if (mDAO.retrieve(id) == null) {
+            int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
+                    + " deseja apagar mais?");
+            // 0= Sim, 1= Não, 2= Cancelar
+            if (input == 1) {
+                this.dispose();
             }
-
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
         }
-
     }//GEN-LAST:event_ApagarActionPerformed
 
     private void cbMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMarcaActionPerformed
-       GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
-       txId.setText(String.valueOf(cBoxMarca.getSelectedItem().getId()));
+        GenericComboBoxModel<Marca> cBoxMarca = (GenericComboBoxModel<Marca>) cbMarca.getModel();
+        txId.setText(String.valueOf(cBoxMarca.getSelectedItem().getId()));
         txDescricao.setText(cBoxMarca.getSelectedItem().getDescricao());
     }//GEN-LAST:event_cbMarcaActionPerformed
 
@@ -221,7 +199,11 @@ public class ApagarMarca extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ApagarMarca().setVisible(true);
+                try {
+                    new ApagarMarca().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ApagarMarca.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

@@ -9,7 +9,9 @@ import br.edu.ifpr.bean.Veiculo;
 import br.edu.ifpr.dao.VeiculoDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.VeiculoTableModel;
+import java.awt.HeadlessException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -20,10 +22,13 @@ import javax.swing.JOptionPane;
  */
 public class ApagarVeiculos extends javax.swing.JFrame {
 
+    Connection con;
+
     /**
      * Creates new form ListarApagarVeiculos
      */
-    public ApagarVeiculos() {
+    public ApagarVeiculos() throws SQLException {
+        this.con = ConnectionFactory.createConnectionToMySQL();
         initComponents();
         VeiculoTableModel model = new VeiculoTableModel();
         jtVeiculos.setModel(model);
@@ -32,10 +37,7 @@ public class ApagarVeiculos extends javax.swing.JFrame {
 
     public void listarVeiculos() {
         try {
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-
             VeiculoDAO veiculoDAO = new VeiculoDAO(con);
-
             int i = 1;
             while (i >= 1 && i <= veiculoDAO.retornaQTD() + 1) {
                 if (veiculoDAO.retrieve(i) != null) {
@@ -146,7 +148,6 @@ public class ApagarVeiculos extends javax.swing.JFrame {
             try {
                 // Recupera o modelo da tbCliente
                 VeiculoTableModel tbmVeiculo = (VeiculoTableModel) jtVeiculos.getModel();
-                Connection con = ConnectionFactory.createConnectionToMySQL();
                 VeiculoDAO dao = new VeiculoDAO(con);
 
                 dao.delete(tbmVeiculo.getVeiculo(linhaSelecionada).getId());
@@ -161,8 +162,7 @@ public class ApagarVeiculos extends javax.swing.JFrame {
                 } else {
                     this.dispose();
                 }
-
-            } catch (Exception ex) {
+            } catch (HeadlessException ex) {
                 Logger.getLogger(ApagarVeiculos.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -199,7 +199,11 @@ public class ApagarVeiculos extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ApagarVeiculos().setVisible(true);
+                try {
+                    new ApagarVeiculos().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ApagarVeiculos.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

@@ -9,7 +9,7 @@ import br.edu.ifpr.bean.Estado;
 import br.edu.ifpr.dao.EstadoDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.GenericComboBoxModel;
-import br.edu.ifpr.view.updates.EditarCategoria;
+import br.edu.ifpr.util.IniciaComboBox;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -21,34 +21,18 @@ import javax.swing.JOptionPane;
  * @author lucas
  */
 public class ApagarEstados extends javax.swing.JFrame {
-    private GenericComboBoxModel<Estado> estadoModel;
+     Connection con = ConnectionFactory.createConnectionToMySQL();
+
     /**
      * Creates new form ApagarEstados
      */
-    public ApagarEstados() {
+    public ApagarEstados() throws SQLException {
         initComponents();
-        iniciarComboBox();
+        new IniciaComboBox().iniciarComboBoxEstado(cbEstado);
         txId.setEditable(false);
         txNome.setEditable(false);
     }
-    public void iniciarComboBox() {
-        try {
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-            //CATEGORIA
-            estadoModel = new GenericComboBoxModel();
-            EstadoDAO eDAO = new EstadoDAO(con);
 
-            for (int i = 1; i < eDAO.retornaQTD(); i++) {
-                if (eDAO.retrieve(i) != null) {
-                    Estado estado = eDAO.retrieve(i);
-                    estadoModel.addElement(estado);
-                }
-            }
-            cbEstado.setModel(estadoModel);
-        } catch (SQLException ex) {
-            Logger.getLogger(EditarCategoria.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -163,30 +147,22 @@ public class ApagarEstados extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApagarActionPerformed
-         try {
-            GenericComboBoxModel<Estado> cBoxEstado = (GenericComboBoxModel<Estado>) cbEstado.getModel();
-
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-            EstadoDAO eDAO = new EstadoDAO(con);
-
-            eDAO.delete(cBoxEstado.getSelectedItem().getId());
-            int id = cBoxEstado.getSelectedItem().getId();
-            if (eDAO.retrieve(id) == null) {
-                int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
-                        + " deseja apagar mais?");
-                // 0= Sim, 1= Não, 2= Cancelar
-                if (input == 1) {
-                    this.dispose();
-                }
+        GenericComboBoxModel<Estado> cBoxEstado = (GenericComboBoxModel<Estado>) cbEstado.getModel();
+        EstadoDAO eDAO = new EstadoDAO(con);
+        eDAO.delete(cBoxEstado.getSelectedItem().getId());
+        int id = cBoxEstado.getSelectedItem().getId();
+        if (eDAO.retrieve(id) == null) {
+            int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
+                    + " deseja apagar mais?");
+            // 0= Sim, 1= Não, 2= Cancelar
+            if (input == 1) {
+                this.dispose();
             }
-
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
         }
     }//GEN-LAST:event_ApagarActionPerformed
 
     private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_CancelarActionPerformed
 
     private void cbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEstadoActionPerformed
@@ -225,7 +201,11 @@ public class ApagarEstados extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ApagarEstados().setVisible(true);
+                try {
+                    new ApagarEstados().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ApagarEstados.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

@@ -21,19 +21,21 @@ import javax.swing.JOptionPane;
  */
 public class ApagarProprietarios extends javax.swing.JFrame {
 
+    Connection con;
+
     /**
      * Creates new form ListarApagarProprietarios
      */
-    public ApagarProprietarios() {
+    public ApagarProprietarios() throws SQLException {
+        this.con = ConnectionFactory.createConnectionToMySQL();
         initComponents();
         ProprietarioTableModel model = new ProprietarioTableModel();
         jtProprietario.setModel(model);
         listaProprietario();
     }
-    public void listaProprietario(){
-         try {
-            Connection con = ConnectionFactory.createConnectionToMySQL();
 
+    public void listaProprietario() {
+        try {
             ProprietarioDAO propDAO = new ProprietarioDAO(con);
 
             int i = 1;
@@ -49,6 +51,7 @@ public class ApagarProprietarios extends javax.swing.JFrame {
             Logger.getLogger(ApagarVeiculos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -142,31 +145,22 @@ public class ApagarProprietarios extends javax.swing.JFrame {
         int linhaSelecionada = jtProprietario.getSelectedRow();
         // Verifica se existe uma linha selecionada
         if (linhaSelecionada != -1) {
-            try {
-                // Recupera o modelo da tbCliente
-                ProprietarioTableModel tbmProprietario = (ProprietarioTableModel) jtProprietario.getModel();
-
-                Connection con = ConnectionFactory.createConnectionToMySQL();
-                ProprietarioDAO dao = new ProprietarioDAO(con);
-                
-               dao.delete(tbmProprietario.getProprietario(linhaSelecionada).getId());
-               int id = tbmProprietario.getProprietario(linhaSelecionada).getId();
-                if (dao.retrieve(id) == null) {
-                   int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
+            // Recupera o modelo da tbCliente
+            ProprietarioTableModel tbmProprietario = (ProprietarioTableModel) jtProprietario.getModel();
+            ProprietarioDAO dao = new ProprietarioDAO(con);
+            dao.delete(tbmProprietario.getProprietario(linhaSelecionada).getId());
+            int id = tbmProprietario.getProprietario(linhaSelecionada).getId();
+            if (dao.retrieve(id) == null) {
+                int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
                         + " deseja apagar mais?");
                 // 0= Sim, 1= Não, 2= Cancelar
                 if (input == 0) {
                     if (linhaSelecionada != -1) {
                         tbmProprietario.removeLinha(linhaSelecionada);
                     }
-                }else{
+                } else {
                     this.dispose();
-                } 
                 }
-                
-
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
             }
         }
     }//GEN-LAST:event_btnApagarActionPerformed
@@ -201,7 +195,11 @@ public class ApagarProprietarios extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new ApagarProprietarios().setVisible(true);
+            try {
+                new ApagarProprietarios().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(ApagarProprietarios.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
 

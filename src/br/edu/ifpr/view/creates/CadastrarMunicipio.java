@@ -7,12 +7,11 @@ package br.edu.ifpr.view.creates;
 
 import br.edu.ifpr.bean.Estado;
 import br.edu.ifpr.bean.Municipio;
-import br.edu.ifpr.dao.EstadoDAO;
 import br.edu.ifpr.dao.MunicipioDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.GenericComboBoxModel;
+import br.edu.ifpr.util.IniciaComboBox;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -23,7 +22,7 @@ import javax.swing.JOptionPane;
  */
 public class CadastrarMunicipio extends javax.swing.JFrame {
 
-    private GenericComboBoxModel<Estado> modelEstado;
+    Connection con = ConnectionFactory.createConnectionToMySQL();
 
     /**
      * Creates new form CadastroMunicipio
@@ -32,27 +31,7 @@ public class CadastrarMunicipio extends javax.swing.JFrame {
      */
     public CadastrarMunicipio() throws Exception {
         initComponents();
-        iniciarComboBox();
-    }
-
-    public void iniciarComboBox() throws Exception {
-
-        modelEstado = new GenericComboBoxModel();
-
-        Connection con = ConnectionFactory.createConnectionToMySQL();
-
-        EstadoDAO estDAO = new EstadoDAO(con);
-
-        for (int i = 1; i < estDAO.retornaQTD(); i++) {
-            if (estDAO.retrieve(i) != null) {
-                Estado estado = estDAO.retrieve(i);
-                modelEstado.addElement(estado);
-            }
-
-        }
-
-        comboEstado.setModel(modelEstado);
-
+        new IniciaComboBox().iniciarComboBoxEstado(comboEstado);
     }
 
     /**
@@ -161,41 +140,36 @@ public class CadastrarMunicipio extends javax.swing.JFrame {
                     + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
                     JOptionPane.ERROR_MESSAGE);
         } else {
-            try {
-                //Recupera Estado
-                GenericComboBoxModel<Estado> cbEstado = (GenericComboBoxModel<Estado>) comboEstado.getModel();
-                //Valida se existe item selecionado no Combobox Estado
-                if (cbEstado.getSelectedItem() != null) {
-                    Connection con = ConnectionFactory.createConnectionToMySQL();
-
-                    Municipio municipio = new Municipio(0, txNome.getText(), cbEstado.getSelectedItem());
-
-                    MunicipioDAO dao = new MunicipioDAO(con);
-
-                    dao.create(municipio);
-
-                    int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
-                            + " deseja fazer mais cadastros?");
-                    // 0= Sim, 1= Não
-                    System.out.println(cbEstado.getSelectedItem());
-                    if (input == 1) {
-                        this.dispose();
-                    }
-                } else {
-                    //Exibe Mensagem de Erro
-                    JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
-                            + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
-                            JOptionPane.ERROR_MESSAGE);
+            //Recupera Estado
+            GenericComboBoxModel<Estado> cbEstado = (GenericComboBoxModel<Estado>) comboEstado.getModel();
+            //Valida se existe item selecionado no Combobox Estado
+            if (cbEstado.getSelectedItem() != null) {
+                
+                Municipio municipio = new Municipio(0, txNome.getText(), cbEstado.getSelectedItem());
+                
+                MunicipioDAO dao = new MunicipioDAO(con);
+                
+                dao.create(municipio);
+                
+                int input = JOptionPane.showConfirmDialog(null, "Registro efetuado,"
+                        + " deseja fazer mais cadastros?");
+                // 0= Sim, 1= Não
+                System.out.println(cbEstado.getSelectedItem());
+                if (input == 1) {
+                    this.dispose();
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(CadastrarMunicipio.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                //Exibe Mensagem de Erro
+                JOptionPane.showMessageDialog(null, "Você deixou algum campo sem "
+                        + "preenchimento. Cuidado!", "Erro falta de prrenchimento",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
 
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-       this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**

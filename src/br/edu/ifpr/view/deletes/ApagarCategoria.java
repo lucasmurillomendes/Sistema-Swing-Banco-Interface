@@ -9,7 +9,7 @@ import br.edu.ifpr.bean.Categoria;
 import br.edu.ifpr.dao.CategoriaDAO;
 import br.edu.ifpr.util.ConnectionFactory;
 import br.edu.ifpr.util.GenericComboBoxModel;
-import br.edu.ifpr.view.updates.EditarCategoria;
+import br.edu.ifpr.util.IniciaComboBox;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -21,36 +21,17 @@ import javax.swing.JOptionPane;
  * @author lucas
  */
 public class ApagarCategoria extends javax.swing.JFrame {
-
+    Connection con = ConnectionFactory.createConnectionToMySQL();
     private GenericComboBoxModel<Categoria> categoriaModel;
 
     /**
      * Creates new form ApagarCategoria
      */
-    public ApagarCategoria() {
+    public ApagarCategoria() throws SQLException {
         initComponents();
-        iniciarComboBox();
+        new IniciaComboBox().iniciarComboBoxCategoria(cbCategoria);
         txId.setEditable(false);
         txDescricao.setEditable(false);
-    }
-
-    public void iniciarComboBox() {
-        try {
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-            //CATEGORIA
-            categoriaModel = new GenericComboBoxModel();
-            CategoriaDAO cDAO = new CategoriaDAO(con);
-
-            for (int i = 1; i < cDAO.retornaQTD(); i++) {
-                if (cDAO.retrieve(i) != null) {
-                    Categoria categoria = cDAO.retrieve(i);
-                    categoriaModel.addElement(categoria);
-                }
-            }
-            cbCategoria.setModel(categoriaModel);
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }
     }
 
     /**
@@ -163,27 +144,18 @@ public class ApagarCategoria extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApagarActionPerformed
-        try {
-            GenericComboBoxModel<Categoria> cBoxCategoria = (GenericComboBoxModel<Categoria>) cbCategoria.getModel();
-
-            Connection con = ConnectionFactory.createConnectionToMySQL();
-            CategoriaDAO dao = new CategoriaDAO(con);
-
-            dao.delete(cBoxCategoria.getSelectedItem().getId());
-            int id = cBoxCategoria.getSelectedItem().getId();
-            if (dao.retrieve(id) == null) {
-                int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
-                        + " deseja apagar mais?");
-                // 0= Sim, 1= Não, 2= Cancelar
-                if (input == 1) {
-                    this.dispose();
-                }
+        GenericComboBoxModel<Categoria> cBoxCategoria = (GenericComboBoxModel<Categoria>) cbCategoria.getModel();
+        CategoriaDAO dao = new CategoriaDAO(con);
+        dao.delete(cBoxCategoria.getSelectedItem().getId());
+        int id = cBoxCategoria.getSelectedItem().getId();
+        if (dao.retrieve(id) == null) {
+            int input = JOptionPane.showConfirmDialog(null, "Registro apagado com sucesso,"
+                    + " deseja apagar mais?");
+            // 0= Sim, 1= Não, 2= Cancelar
+            if (input == 1) {
+                this.dispose();
             }
-
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
         }
-
     }//GEN-LAST:event_ApagarActionPerformed
 
     private void cbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCategoriaActionPerformed
@@ -226,7 +198,11 @@ public class ApagarCategoria extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ApagarCategoria().setVisible(true);
+                try {
+                    new ApagarCategoria().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ApagarCategoria.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
